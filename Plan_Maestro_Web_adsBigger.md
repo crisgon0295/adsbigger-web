@@ -97,7 +97,7 @@ El Home es la página más importante. Sigue el arco de energía del Visual Brai
 | **S1** | **HERO** | Fondo Obsidian \#111111. Headline en Space Grotesk CAPS: 'INSTALAMOS EL SISTEMA QUE TE TRAE CLIENTES CALIFICADOS CADA SEMANA'. Sub: '— o trabajamos gratis hasta lograrlo.' Doble CTA: WhatsApp (rojo) \+ Diagnóstico (azul). Overlay cinematográfico 55-65%. |  |
 | **S2** | **EL PROBLEMA** | 3 bloques con los dolores del ICP: dependencia del voz a voz, leads basura, crecimiento que depende del fundador. Fondo claro \#F4F4F4. Texto Inter. Genera identificación antes de ofrecer la salida. |  |
 | **S3** | **EL SISTEMA** | Diagrama visual del Sistema ADSBIGGER™: 4 capas (Adquisición, Calificación, Cierre, Control). Fondo oscuro. Iconografía tech. Frase: 'No vendemos anuncios. Instalamos estructura.' |  |
-| **S4** | **CASO ANCLA** | Ferrieprofiles: $0 → $230M+ COP en 90 días. Números grandes en Space Grotesk CAPS. Timeline visual. Fondo claro. |  |
+| **S4** | **CASO ANCLA** | Ferriperfiles: $0 → $230M+ COP en 90 días. Números grandes en Space Grotesk CAPS. Timeline visual. Fondo claro. |  |
 | **S5** | **PROCESO 90 DÍAS** | 4 fases simplificadas: Diagnóstico → Instalación → Operación → Resultados. Cards o timeline horizontal. Fondo oscuro. |  |
 | **S6** | **FILTRO \+ GARANTÍA** | Para quién es / Para quién NO es. La garantía completa. Fondo rojo \#D51A05. Alta energía. Tensión que justifica el CTA. |  |
 | **S7** | **CTA FINAL** | Doble camino: agendar diagnóstico o descargar PDF 5 Cuellos. Fondo Obsidian. Botón WhatsApp prominente. @adsbigger en Azul. |  |
@@ -163,7 +163,7 @@ No solo keywords. Implementación técnica de BIG SEO que cubre los 4 pilares: t
 | \# | Título | Keyword | Prioridad |
 | :---- | :---- | :---- | :---- |
 | 1 | Sistema de adquisición de clientes: qué es y cómo instalarlo | sistema de adquisición de clientes | **🔴 PILAR** |
-| 2 | Caso de éxito: ferrieprofiles de $0 a $230M COP en 90 días | caso de éxito marketing digital Colombia | **🔴 PILAR** |
+| 2 | Caso de éxito: ferriperfiles de $0 a $230M COP en 90 días | caso de éxito marketing digital Colombia | **🔴 PILAR** |
 | 3 | Por qué tu negocio depende del voz a voz (y cómo salir) | cómo conseguir clientes sin voz a voz | 🟡 Alto volumen |
 | 4 | Cómo escalar tu negocio sin que todo dependa de ti | cómo escalar mi negocio | 🟡 Alto volumen |
 | 5 | Por qué las agencias de marketing no funcionan para B2B | agencia de marketing no funciona | 🟢 Posicionamiento |
@@ -303,7 +303,7 @@ Plan de ejecución dividido en 6 sprints. Cada sprint tiene entregables claros y
 
 17. Construir /sistema: explicación completa del Sistema ADSBIGGER™ \+ diagrama interactivo
 
-18. Construir /casos: página de casos de éxito con ferrieprofiles como ancla
+18. Construir /casos: página de casos de éxito con ferriperfiles como ancla
 
 19. Construir /sobre: historia de Cris \+ por qué adsBigger no es agencia
 
@@ -335,7 +335,7 @@ Plan de ejecución dividido en 6 sprints. Cada sprint tiene entregables claros y
 
 29. Crear plantilla de blog post: tabla de contenidos, barra de progreso, CTA inline, autor, fecha
 
-30. Escribir y publicar los 3 blogs pilar: \#1 (sistema de adquisición), \#2 (caso ferrieprofiles), \#3 (voz a voz)
+30. Escribir y publicar los 3 blogs pilar: \#1 (sistema de adquisición), \#2 (caso ferriperfiles), \#3 (voz a voz)
 
 31. Implementar JSON-LD: Organization, LocalBusiness, Service, Article, FAQ, BreadcrumbList
 
