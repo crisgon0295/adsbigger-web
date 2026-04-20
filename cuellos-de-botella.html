@@ -88,7 +88,7 @@ function Hero({ onDownloadClick }) {
   return (
     <section className="section-dark" style={{ minHeight: '85vh', display: 'flex', alignItems: 'center', position: 'relative', overflow: 'hidden' }}>
       <div className="glow-red" style={{ top: -100, right: -100, width: 800, height: 600 }} />
-      <div className="container" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '64px', alignItems: 'center' }}>
+      <div className="container grid-responsive">
         <div>
           <div className="badge badge-red">
             <span className="dot" />
@@ -183,7 +183,7 @@ function Cuellos() {
           El problema no es tu producto ni tu equipo. El problema es la falta de estructura.
         </p>
 
-        <div className="card-white" style={{ marginTop: 56, display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: 1, background: '#D9D9D9' }}>
+        <div className="card-white" style={{ marginTop: 56, display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: 1, background: '#D9D9D9' }}>
           {items.map((it, i) => (
             <div key={i} style={{ background: '#fff', padding: '36px 32px' }}>
               <div className="sg" style={{ fontSize: 44, color: it.color, lineHeight: 1 }}>{it.n}</div>

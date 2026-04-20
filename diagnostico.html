@@ -127,7 +127,7 @@ function EmailGate({onContinue, prefill=''}) {
   return (
     <section className="section-dark" style={{ minHeight: '80vh', display: 'flex', alignItems: 'center' }}>
       <div className="glow-red" style={{ top: -100, right: -100, width: 600, height: 600 }} />
-      <div className="container" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '56px', alignItems: 'center' }}>
+      <div className="container grid-responsive-even">
         <div>
           <div className="badge badge-red">
             <span className="dot" />
@@ -169,7 +169,7 @@ function Intro({onStart, email}) {
   return (
     <section className="section-dark" style={{ minHeight: '80vh', display: 'flex', alignItems: 'center' }}>
       <div className="glow-blue" style={{ top: -100, right: -100, width: 600, height: 600 }} />
-      <div className="container" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '56px', alignItems: 'center' }}>
+      <div className="container grid-responsive-even">
         <div>
           <div className="badge badge-blue">
             <span className="dot" />
@@ -226,7 +226,7 @@ function Section({b, idx, total, answers, toggle, onNext, onPrev}) {
           <div className="mono" style={{ fontSize: 11, color: '#888' }}>{idx + 1}/{total}</div>
         </div>
 
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '64px', alignItems: 'start' }}>
+        <div className="grid-responsive-even" style={{ alignItems: 'start' }}>
           <div style={{ position: 'sticky', top: 120 }}>
             <div className="sg" style={{ fontSize: 'clamp(56px, 8vw, 100px)', color: b.color, lineHeight: 0.9 }}>{b.n}</div>
             <h2 className="headline-md sg" style={{ marginTop: 8 }}>{b.t}</h2>
@@ -344,7 +344,7 @@ function Result({ scores, email, onRestart }) {
       <section className="section-dark" style={{ minHeight: '60vh', display: 'flex', alignItems: 'center', position: 'relative', overflow: 'hidden' }}>
         <div style={{ position: 'absolute', top: -100, left: '50%', transform: 'translateX(-50%)', width: 900, height: 600, background: `radial-gradient(ellipse at center, ${tier.c}20, transparent 60%)`, filter: 'blur(40px)', pointerEvents: 'none' }} />
         
-        <div className="container" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '64px', alignItems: 'center' }}>
+        <div className="container grid-responsive-even">
           <div>
             <div className="mono" style={{ fontSize: 11, color: tier.c, letterSpacing: '.3em', textTransform: 'uppercase' }}>TU RESULTADO</div>
             <h1 className="sg headline-xl" style={{ margin: '20px 0 0', textWrap: 'balance' }}>{tier.t}</h1>

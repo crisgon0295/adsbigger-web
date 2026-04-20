@@ -965,3 +965,27 @@ input, textarea { font-family: inherit; }
     font-size: 13px;
   }
 }
+
+/* -- 18. RESPONSIVE GRIDS ------------------------ */
+.grid-responsive {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 56px;
+  align-items: center;
+}
+@media (min-width: 768px) {
+  .grid-responsive {
+    grid-template-columns: 1.1fr 1fr;
+  }
+}
+.grid-responsive-even {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 56px;
+  align-items: center;
+}
+@media (min-width: 768px) {
+  .grid-responsive-even {
+    grid-template-columns: 1fr 1fr;
+  }
+}
