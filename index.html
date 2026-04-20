@@ -98,8 +98,7 @@ function Navbar() {
       <nav className={`navbar ${scrolled ? 'scrolled' : ''}`}>
         <div className="navbar-inner">
           <a href="/" className="navbar-logo">
-            <span className="navbar-logo-icon">A</span>
-            <span className="navbar-logo-text">adsBigger<sup>™</sup></span>
+            <img src="assets/logo-adsbigger-white.png" alt="adsBigger" style={{ height: 40, objectFit: 'contain' }} />
           </a>
           <div className="navbar-links">
             {['Sistema', 'Casos', 'Proceso', 'Garantia'].map((l) => (
@@ -134,8 +133,7 @@ function Footer() {
       <div className="footer-grid">
         <div>
           <div className="navbar-logo">
-            <span className="navbar-logo-icon">A</span>
-            <span className="navbar-logo-text">adsBigger</span>
+            <img src="assets/logo-adsbigger-white.png" alt="adsBigger" style={{ height: 32, objectFit: 'contain', opacity: 0.8 }} />
           </div>
           <div style={{ fontSize: 14, color: '#888', marginTop: 14, lineHeight: 1.55, maxWidth: 320 }}>
             Instalamos sistemas, no vendemos anuncios. Bogotá, Colombia · Latam.

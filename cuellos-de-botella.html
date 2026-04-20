@@ -35,8 +35,7 @@ function Navbar() {
       <nav className={`navbar ${scrolled ? 'scrolled' : ''}`}>
         <div className="navbar-inner">
           <a href="/" className="navbar-logo">
-            <span className="navbar-logo-icon">A</span>
-            <span className="navbar-logo-text">adsBigger<sup>™</sup></span>
+            <img src="assets/logo-adsbigger-white.png" alt="adsBigger" style={{ height: 36, objectFit: 'contain' }} />
           </a>
           <div className="navbar-links">
             <a href="/#sistema" className="navbar-link sg">Sistema</a>
@@ -130,7 +129,7 @@ function Hero({ onDownloadClick }) {
           <div style={{ transform: 'rotateY(-8deg) rotateX(4deg)', transformStyle: 'preserve-3d', transition: 'transform var(--duration-normal) ease', maxWidth: 420, width: '100%' }}>
             <div style={{ background: '#fff', color: 'var(--pure-black)', borderRadius: 6, padding: '48px 40px', boxShadow: '0 40px 80px rgba(0,0,0,.6), 0 10px 30px rgba(213,26,5,.15)', minHeight: 540, position: 'relative', overflow: 'hidden' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 20 }}>
-                <span style={{ width: 20, height: 20, background: 'var(--red)', borderRadius: 4, display: 'grid', placeItems: 'center', color: '#fff', fontFamily: 'var(--font-headline)', fontSize: 13 }}>A</span>
+                <img src="assets/logo-icon-black.png" alt="" style={{ width: 20, height: 20, objectFit: 'contain' }} />
                 <span className="mono" style={{ fontSize: 10, color: '#888', letterSpacing: '.15em' }}>ADSBIGGER™ · BOGOTÁ</span>
               </div>
               <div className="mono" style={{ fontSize: 10, color: 'var(--red)', letterSpacing: '.25em' }}>RECURSO GRATUITO</div>
