@@ -989,3 +989,14 @@ input, textarea { font-family: inherit; }
     grid-template-columns: 1fr 1fr;
   }
 }
+
+/* -- 19. STICKY DESKTOP ------------------------ */
+.sticky-desktop {
+  position: relative;
+}
+@media (min-width: 768px) {
+  .sticky-desktop {
+    position: sticky;
+    top: 120px;
+  }
+}

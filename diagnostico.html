@@ -124,7 +124,7 @@ function EmailGate({onContinue, prefill=''}) {
   const valid = /.+@.+\..+/.test(email);
 
   return (
-    <section className="section-dark" style={{ minHeight: '80vh', display: 'flex', alignItems: 'center' }}>
+    <section className="section-dark" style={{ minHeight: '80vh', display: 'flex', alignItems: 'center', position: 'relative', overflow: 'hidden' }}>
       <div className="glow-red" style={{ top: -100, right: -100, width: 600, height: 600 }} />
       <div className="container grid-responsive-even">
         <div>
@@ -166,7 +166,7 @@ function EmailGate({onContinue, prefill=''}) {
 /* =============== INTRO =============== */
 function Intro({onStart, email}) {
   return (
-    <section className="section-dark" style={{ minHeight: '80vh', display: 'flex', alignItems: 'center' }}>
+    <section className="section-dark" style={{ minHeight: '80vh', display: 'flex', alignItems: 'center', position: 'relative', overflow: 'hidden' }}>
       <div className="glow-blue" style={{ top: -100, right: -100, width: 600, height: 600 }} />
       <div className="container grid-responsive-even">
         <div>
@@ -215,7 +215,7 @@ function Section({b, idx, total, answers, toggle, onNext, onPrev}) {
   const verdict = checked <= 1 ? ['Ok.', '#666'] : checked <= 3 ? ['Activo.', 'var(--yellow)'] : ['Crítico.', 'var(--red)'];
   
   return (
-    <section className="section-dark" style={{ minHeight: '90vh' }}>
+    <section className="section-dark" style={{ minHeight: '90vh', position: 'relative', overflow: 'hidden' }}>
       <div className="container-narrow">
         <div style={{ display: 'flex', alignItems: 'center', gap: 14, marginBottom: 48, paddingTop: 20 }}>
           <div className="mono" style={{ fontSize: 11, color: '#888', letterSpacing: '.2em' }}>CUELLO {b.n} / 05</div>
@@ -226,7 +226,7 @@ function Section({b, idx, total, answers, toggle, onNext, onPrev}) {
         </div>
 
         <div className="grid-responsive-even" style={{ alignItems: 'start' }}>
-          <div style={{ position: 'sticky', top: 120 }}>
+          <div className="sticky-desktop">
             <div className="sg" style={{ fontSize: 'clamp(56px, 8vw, 100px)', color: b.color, lineHeight: 0.9 }}>{b.n}</div>
             <h2 className="headline-md sg" style={{ marginTop: 8 }}>{b.t}</h2>
             <p className="sub" style={{ fontSize: 20, color: '#cfcfcf', marginTop: 14, fontStyle: 'italic' }}>{b.subtitle}</p>
