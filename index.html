@@ -1,0 +1,715 @@
+<!doctype html>
+<html lang="es-CO">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>adsBigger — Instalamos sistemas, no vendemos anuncios</title>
+  <meta name="description" content="No somos agencia de marketing. Instalamos sistemas de adquisición, calificación y cierre predecibles en empresas que ya venden pero no escalan.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=DM+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+  
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    "name": "adsBigger",
+    "url": "https://adsbigger.com",
+    "logo": "https://adsbigger.com/assets/favicon.ico",
+    "sameAs": [
+      "https://www.linkedin.com/company/adsbigger",
+      "https://www.instagram.com/adsbigger"
+    ]
+  }
+  </script>
+</head>
+<body>
+<div id="root"></div>
+
+<script type="text/babel" data-presets="react">
+const { useState, useEffect, useRef } = React;
+
+/* ============================================================
+   Hooks + helpers
+============================================================ */
+function useInView(threshold = 0.15) {
+  const ref = useRef(null);
+  const [v, setV] = useState(false);
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    const io = new IntersectionObserver((es) => {
+      es.forEach((e) => {
+        if (e.isIntersecting) {
+          setV(true);
+          io.unobserve(el);
+        }
+      });
+    }, { threshold });
+    io.observe(el);
+    return () => io.disconnect();
+  }, [threshold]);
+  return [ref, v];
+}
+
+function Reveal({ children, delay = 0, as: Tag = 'div', className = '', style = {} }) {
+  const [r, v] = useInView();
+  return <Tag ref={r} className={`reveal ${v ? 'visible' : ''} ${className}`} style={{ transitionDelay: `${delay}ms`, ...style }}>{children}</Tag>;
+}
+
+function useCounter(target, active, duration = 1400) {
+  const [val, setVal] = useState(0);
+  useEffect(() => {
+    if (!active) return;
+    let raf, start;
+    const ease = (t) => 1 - Math.pow(1 - t, 3);
+    const step = (ts) => {
+      if (!start) start = ts;
+      const p = Math.min((ts - start) / duration, 1);
+      setVal(target * ease(p));
+      if (p < 1) raf = requestAnimationFrame(step);
+    };
+    raf = requestAnimationFrame(step);
+    return () => cancelAnimationFrame(raf);
+  }, [target, active, duration]);
+  return val;
+}
+
+/* ============================================================
+   SHARED COMPONENTS
+============================================================ */
+function Navbar() {
+  const [scrolled, setScrolled] = useState(false);
+  const [mobileOpen, setMobileOpen] = useState(false);
+  
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 8);
+    window.addEventListener('scroll', onScroll);
+    onScroll();
+    return () => window.removeEventListener('scroll', onScroll);
+  }, []);
+
+  return (
+    <>
+      <nav className={`navbar ${scrolled ? 'scrolled' : ''}`}>
+        <div className="navbar-inner">
+          <a href="/" className="navbar-logo">
+            <span className="navbar-logo-icon">A</span>
+            <span className="navbar-logo-text">adsBigger<sup>™</sup></span>
+          </a>
+          <div className="navbar-links">
+            {['Sistema', 'Casos', 'Proceso', 'Garantia'].map((l) => (
+              <a key={l} href={`/#${l.toLowerCase()}`} className="navbar-link sg">{l}</a>
+            ))}
+          </div>
+          <a href="/diagnostico" className="btn btn-red navbar-cta">Diagnóstico gratis</a>
+          
+          <div className={`navbar-hamburger ${mobileOpen ? 'open' : ''}`} onClick={() => setMobileOpen(!mobileOpen)}>
+            <span />
+            <span />
+            <span />
+          </div>
+        </div>
+      </nav>
+
+      {/* Mobile Menu */}
+      <div className={`navbar-mobile-menu ${mobileOpen ? 'open' : ''}`}>
+        {['Sistema', 'Casos', 'Proceso', 'Garantia'].map((l) => (
+          <a key={l} href={`/#${l.toLowerCase()}`} onClick={() => setMobileOpen(false)} className="sg">{l}</a>
+        ))}
+        <a href="/diagnostico" onClick={() => setMobileOpen(false)} className="btn btn-red sg" style={{ marginTop: 24 }}>Diagnóstico gratis</a>
+        <a href="/cuellos-de-botella" onClick={() => setMobileOpen(false)} className="btn btn-ghost sg" style={{ marginTop: 8 }}>Descargar PDF</a>
+      </div>
+    </>
+  );
+}
+
+function Footer() {
+  return (
+    <footer className="footer">
+      <div className="footer-grid">
+        <div>
+          <div className="navbar-logo">
+            <span className="navbar-logo-icon">A</span>
+            <span className="navbar-logo-text">adsBigger</span>
+          </div>
+          <div style={{ fontSize: 14, color: '#888', marginTop: 14, lineHeight: 1.55, maxWidth: 320 }}>
+            Instalamos sistemas, no vendemos anuncios. Bogotá, Colombia · Latam.
+          </div>
+          <div className="footer-brand-handle">@adsbigger</div>
+        </div>
+
+        <div>
+          <div className="footer-col-title">Sistema</div>
+          <div className="footer-col-links">
+            <a href="/#sistema">El Sistema</a>
+            <a href="/#casos">Casos Ancla</a>
+            <a href="/#proceso">Proceso 90d</a>
+            <a href="/#garantia">Garantía</a>
+          </div>
+        </div>
+        
+        <div>
+          <div className="footer-col-title">Recursos</div>
+          <div className="footer-col-links">
+            <a href="/diagnostico">Diagnóstico BANT</a>
+            <a href="/cuellos-de-botella">Lead Magnet PDF</a>
+          </div>
+        </div>
+        
+        <div>
+          <div className="footer-col-title">Contacto</div>
+          <div className="footer-col-links">
+            <a href="https://wa.me/573057670817?text=Hola,%20me%20gustar%C3%ADa%20hacer%20el%20diagn%C3%B3stico%20de%20sistemas" target="_blank">WhatsApp</a>
+          </div>
+        </div>
+      </div>
+
+      <div className="footer-bottom">
+        <span>© 2026 adsBigger™ · Todos los derechos reservados</span>
+        <span>adsbigger.com · hecho en Bogotá</span>
+      </div>
+    </footer>
+  );
+}
+
+function WhatsAppFab() {
+  const [hover, setHover] = useState(false);
+  return (
+    <a href="https://wa.me/573057670817?text=Hola,%20me%20gustar%C3%ADa%20agendar%20un%20diagn%C3%B3stico" 
+       target="_blank" 
+       rel="noopener noreferrer"
+       onMouseEnter={() => setHover(true)} 
+       onMouseLeave={() => setHover(false)}
+       className="wa-fab">
+      <svg width="28" height="28" viewBox="0 0 32 32" fill="none">
+        <path d="M16 3C8.82 3 3 8.82 3 16c0 2.47.67 4.78 1.84 6.77L3 29l6.45-1.78A12.93 12.93 0 0 0 16 29c7.18 0 13-5.82 13-13S23.18 3 16 3z" fill="#fff" />
+        <path d="M12.5 10.8c-.3-.67-.62-.68-.9-.7l-.77-.01c-.27 0-.7.1-1.07.5-.37.4-1.4 1.37-1.4 3.33 0 1.97 1.44 3.87 1.64 4.14.2.27 2.77 4.43 6.85 6.04 3.4 1.34 4.1 1.07 4.83 1 .73-.07 2.37-.97 2.7-1.9.33-.93.33-1.73.23-1.9-.1-.17-.37-.27-.77-.47-.4-.2-2.37-1.17-2.73-1.3-.37-.13-.63-.2-.9.2-.27.4-1.03 1.3-1.27 1.57-.23.27-.47.3-.87.1-.4-.2-1.7-.63-3.23-2-1.2-1.07-2-2.4-2.23-2.8-.23-.4-.02-.6.18-.8.18-.18.4-.47.6-.7.2-.23.27-.4.4-.67.13-.27.07-.5-.03-.7-.1-.2-.87-2.17-1.22-2.97z" fill="#25D366" />
+      </svg>
+      {hover && <div className="wa-fab-tooltip sg">Habla con Cris</div>}
+    </a>
+  );
+}
+
+function Marquee() {
+  const items = [
+    'No vendemos anuncios. Instalamos sistemas.',
+    'Clientes calificados cada semana — o trabajamos gratis.',
+    'Esto es un activo. No un servicio.',
+    'Solo 2 empresas por trimestre.',
+    'Tu negocio no necesita más ads. Necesita estructura.'
+  ];
+  return (
+    <div className="marquee-strip">
+      <div className="marquee-track">
+        {[...items, ...items].map((it, i) => (
+          <div key={i} className="marquee-item" style={{ color: i % 2 ? 'var(--yellow)' : 'var(--white)' }}>
+            {it}
+            <span className="sep">✦</span>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+/* ============================================================
+   HERO
+============================================================ */
+function Hero() {
+  return (
+    <section className="section-dark" style={{ position: 'relative', overflow: 'hidden', paddingBottom: '120px' }}>
+      <div className="glow-deep" style={{ top: -160, left: '50%', transform: 'translateX(-50%)', width: 900, height: 520 }} />
+      <div className="glow-blue" style={{ bottom: -220, right: -160, width: 620, height: 620 }} />
+      
+      <div className="container" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '60px', alignItems: 'center', position: 'relative' }}>
+        <div>
+          <div className="badge badge-blue" style={{ animation: 'fadeIn 600ms ease both' }}>
+            <span className="dot" />
+            <span className="sg" style={{ fontWeight: 500, letterSpacing: '.02em' }}>Solo 2 empresas por trimestre</span>
+          </div>
+
+          <h1 className="headline-xl sg" style={{ margin: '28px 0 0' }}>
+            <span style={{ display: 'block', animation: 'fadeUp 700ms 120ms ease both', opacity: 0 }}>INSTALAMOS EL SISTEMA</span>
+            <span style={{ display: 'block', animation: 'fadeUp 700ms 240ms ease both', opacity: 0 }}>QUE TE TRAE CLIENTES</span>
+            <span style={{ display: 'block', animation: 'fadeUp 700ms 360ms ease both', opacity: 0, color: 'var(--blue)' }}>CALIFICADOS CADA SEMANA.</span>
+          </h1>
+
+          <p className="sub" style={{
+            marginTop: 24, fontSize: 'clamp(18px, 4vw, 22px)', lineHeight: 1.55, color: '#b8b8b8', maxWidth: 540,
+            animation: 'fadeUp 700ms 520ms ease both', opacity: 0
+          }}>
+            — o trabajamos gratis hasta lograrlo. No somos agencia. <span style={{ color: '#fff' }}>Instalamos activos</span> de adquisición y cierre en empresas que ya venden pero no escalan.
+          </p>
+
+          <div className="btn-group" style={{ marginTop: 36, display: 'flex', gap: 12, flexWrap: 'wrap', animation: 'fadeUp 700ms 680ms ease both', opacity: 0 }}>
+            <a href="/diagnostico" className="btn btn-red sg">
+              Agenda tu diagnóstico gratis
+              <span style={{ fontSize: 16, transform: 'translateY(-1px)' }}>→</span>
+            </a>
+            <a href="/cuellos-de-botella" className="btn btn-blue sg">
+              Ver PDF y Cuellos
+            </a>
+          </div>
+
+          <div style={{ marginTop: 36, display: 'flex', alignItems: 'center', gap: 18, animation: 'fadeUp 700ms 820ms ease both', opacity: 0 }}>
+            <div style={{ width: 44, height: 1, background: 'rgba(255,255,255,0.18)' }} />
+            <div className="sub" style={{ fontSize: 16, color: '#888', letterSpacing: '.02em' }}>
+              <span style={{ color: 'var(--blue)', fontWeight: 600 }}>+230M COP extras al mes </span> documentados · <span className="mono" style={{ fontSize: 13, color: '#bbb' }}>ferriperfiles.com</span>
+            </div>
+          </div>
+        </div>
+
+        <HeroPanel />
+      </div>
+    </section>
+  );
+}
+
+function HeroPanel() {
+  const [lineIdx, setLineIdx] = useState(0);
+  const lines = [
+    { t: 'init', c: '→ cargando sistema ADSBIGGER™' },
+    { t: 'ok', c: '✓ capa 01 · adquisición    — conectada' },
+    { t: 'ok', c: '✓ capa 02 · calificación   — conectada' },
+    { t: 'ok', c: '✓ capa 03 · cierre         — conectada' },
+    { t: 'ok', c: '✓ capa 04 · control        — conectada' },
+    { t: 'data', c: '⌁ pipeline.semana = 14 leads calificados' },
+    { t: 'data', c: '⌁ ROAS = 4.8x · CPL = $48k COP' },
+    { t: 'cta', c: '▶ agendar_diagnostico()' }
+  ];
+
+  useEffect(() => {
+    const id = setInterval(() => setLineIdx((i) => (i + 1) % lines.length), 900);
+    return () => clearInterval(id);
+  }, []);
+
+  return (
+    <div style={{ position: 'relative' }}>
+      <div className="card-dark" style={{ minHeight: 440, boxShadow: 'var(--shadow-lg), inset 0 1px 0 rgba(255,255,255,0.04)' }}>
+        <div style={{ padding: '14px 16px', borderBottom: 'var(--border-subtle)', display: 'flex', alignItems: 'center', gap: 10 }}>
+          <div style={{ width: 10, height: 10, borderRadius: 99, background: 'var(--red)', opacity: .8 }} />
+          <div style={{ width: 10, height: 10, borderRadius: 99, background: 'var(--yellow)', opacity: .7 }} />
+          <div style={{ width: 10, height: 10, borderRadius: 99, background: 'var(--blue)', opacity: .8 }} />
+          <div className="mono" style={{ fontSize: 11, color: '#666', marginLeft: 12 }}>sistema ~ status</div>
+          <div style={{ flex: 1 }} />
+          <div className="mono" style={{ fontSize: 10, color: '#888', display: 'flex', alignItems: 'center', gap: 6 }}>
+            <span style={{ width: 6, height: 6, borderRadius: 99, background: '#20D07A', boxShadow: '0 0 6px #20D07A' }} />
+            LIVE · 90d
+          </div>
+        </div>
+
+        <div className="mono" style={{ padding: '22px 20px', fontSize: 'clamp(11px, 2vw, 13px)', lineHeight: 1.9, color: '#d6d6d6', minHeight: 280, overflowX: 'auto' }}>
+          {lines.slice(0, lineIdx + 1).map((ln, i) => {
+            const color = ln.t === 'ok' ? 'var(--blue)' : ln.t === 'data' ? 'var(--yellow)' : ln.t === 'cta' ? 'var(--red)' : '#888';
+            return <div key={i} style={{ animation: 'fadeDown 400ms ease both', color, opacity: i === lineIdx ? 1 : 0.5, whiteSpace: 'nowrap' }}>
+              <span style={{ color: '#666', marginRight: 10 }}>0{i + 1}</span>{ln.c}
+            </div>;
+          })}
+          <span style={{ display: 'inline-block', width: 8, height: 14, background: 'var(--blue)', verticalAlign: 'middle', animation: 'blink 1s steps(1) infinite', marginLeft: 2 }} />
+        </div>
+
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', borderTop: 'var(--border-subtle)' }}>
+          {[
+            ['Leads/sem', '14', 'var(--blue)'], 
+            ['ROAS', '4.8×', 'var(--white)'], 
+            ['CPL', '$48k', 'var(--yellow)']
+          ].map(([l, v, c], i) => (
+            <div key={i} style={{ padding: '18px 10px', borderRight: i < 2 ? 'var(--border-subtle)' : 'none', textAlign: 'center' }}>
+              <div className="mono" style={{ fontSize: 9, color: '#666', letterSpacing: '.1em', textTransform: 'uppercase' }}>{l}</div>
+              <div className="sg" style={{ fontSize: 'clamp(20px, 4vw, 26px)', fontWeight: 700, color: c, marginTop: 4 }}>{v}</div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+/* ============================================================
+   PROBLEMA
+============================================================ */
+function Problema() {
+  const bullets = [
+    { k: '01', t: 'Tu pipeline depende de ti.', b: 'Si te desconectas una semana, las ventas se caen. Eso no es un negocio. Es un trabajo con empleados.' },
+    { k: '02', t: 'Pagaste agencia. Sin resultados.', b: 'Entregaron reportes de likes y alcance. Cero clientes cerrados documentados. Volviste al punto cero.' },
+    { k: '03', t: 'Tu equipo no tiene proceso.', b: 'Cada vendedor improvisa. Los leads buenos se queman. Los malos consumen tu tiempo.' },
+    { k: '04', t: 'No puedes predecir el mes que viene.', b: 'No sabes cuántos clientes vas a cerrar. Y sin eso, no puedes contratar, ni facturar con calma.' }
+  ];
+
+  return (
+    <section id="problema" className="section-light">
+      <div className="container-narrow">
+        <Reveal>
+          <div className="section-label">
+            <span className="dot-red">◼</span> &nbsp;01 · el problema real
+          </div>
+        </Reveal>
+        <Reveal delay={80}>
+          <h2 className="headline-lg sg" style={{ margin: '18px 0 0', maxWidth: 900 }}>
+            TU NEGOCIO NO NECESITA <span style={{ color: 'var(--red)' }}>MÁS ADS</span>.<br />
+            NECESITA <span style={{ textDecoration: 'underline', textDecorationColor: 'var(--blue)', textDecorationThickness: 6, textUnderlineOffset: 12 }}>ESTRUCTURA</span>.
+          </h2>
+        </Reveal>
+        <Reveal delay={160}>
+          <p className="sub" style={{ fontSize: 'clamp(18px, 4vw, 20px)', lineHeight: 1.6, color: '#3a3a3a', maxWidth: 680, marginTop: 28 }}>
+            Escuchamos la misma historia en cada diagnóstico. Cambian los sectores, los tickets y los países. No cambia el patrón:
+          </p>
+        </Reveal>
+
+        <div className="card-white" style={{ marginTop: 64, display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(260px,1fr))', gap: 1, background: '#D9D9D9' }}>
+          {bullets.map((bl, i) => (
+            <Reveal key={bl.k} delay={i * 80}>
+              <div style={{ background: '#fff', padding: '32px 28px', height: '100%', position: 'relative' }}>
+                <div className="sg" style={{ fontSize: 12, color: 'var(--red)', fontWeight: 700, letterSpacing: '.2em' }}>{bl.k}</div>
+                <div className="sg" style={{ fontSize: 22, fontWeight: 700, marginTop: 10, lineHeight: 1.15 }}>{bl.t}</div>
+                <div style={{ fontSize: 15, lineHeight: 1.6, color: '#555', marginTop: 12 }}>{bl.b}</div>
+              </div>
+            </Reveal>
+          ))}
+        </div>
+
+        <Reveal delay={400}>
+          <div style={{
+            marginTop: 56, padding: '36px 40px', background: 'var(--pure-black)', color: 'var(--white)', borderRadius: 14,
+            display: 'flex', alignItems: 'center', gap: 28, flexWrap: 'wrap'
+          }}>
+            <div className="sg" style={{ fontSize: 48, fontWeight: 700, color: 'var(--yellow)', lineHeight: 1, letterSpacing: '-0.03em' }}>“</div>
+            <div style={{ flex: 1, minWidth: 260 }}>
+              <div className="sub" style={{ fontSize: 24, fontStyle: 'italic', fontWeight: 500, lineHeight: 1.35, color: 'var(--yellow)' }}>
+                Si tu negocio depende de ti para funcionar, no tienes un negocio. Tienes un trabajo disfrazado de empresa.
+              </div>
+              <div className="mono" style={{ fontSize: 12, color: '#888', marginTop: 12, letterSpacing: '.04em' }}>— Cris · adsBigger</div>
+            </div>
+          </div>
+        </Reveal>
+      </div>
+    </section>
+  );
+}
+
+/* ============================================================
+   SISTEMA
+============================================================ */
+function Sistema() {
+  const capas = [
+    { k: 'A', n: '01', t: 'ADQUISICIÓN', s: 'Tráfico controlado.', b: 'Ads pagos + orgánico instalado sobre una oferta irresistible. Entradas predecibles, no campañas de suerte.', items: ['Oferta probada', 'Paid media', 'Orgánico estructural'] },
+    { k: 'B', n: '02', t: 'CALIFICACIÓN', s: 'Filtro automático.', b: 'Formularios, bots y scripts que filtran. Solo entran al pipeline leads con presupuesto, problema y timing.', items: ['BANT automatizado', 'Scoring', 'Descarte inmediato'] },
+    { k: 'C', n: '03', t: 'CIERRE', s: 'Proceso replicable.', b: 'Guión de ventas, objeciones mapeadas y seguimiento en CRM. El cierre deja de depender del ánimo del vendedor.', items: ['Playbook de ventas', 'CRM instalado', 'Follow-up automático'] },
+    { k: 'D', n: '04', t: 'CONTROL', s: 'Dashboard vivo.', b: 'Métricas que importan — CPL, ROAS, clientes cerrados — en un dashboard que el dueño lee en 2 minutos.', items: ['KPIs reales', 'Dashboard 24/7', 'Revisión semanal'] }
+  ];
+
+  const [active, setActive] = useState(0);
+
+  return (
+    <section id="sistema" className="section-dark" style={{ borderTop: 'var(--border-subtle)', borderBottom: 'var(--border-subtle)' }}>
+      <div className="container-narrow">
+        <Reveal>
+          <div className="section-label">
+            <span className="dot-blue">◼</span> &nbsp;02 · el mecanismo
+          </div>
+        </Reveal>
+        <Reveal delay={80}>
+          <h2 className="headline-lg sg" style={{ margin: '18px 0 0', maxWidth: 980 }}>
+            EL SISTEMA <span style={{ color: 'var(--blue)' }}>ADSBIGGER™</span>.<br />
+            4 CAPAS INSTALADAS EN 90 DÍAS.
+          </h2>
+        </Reveal>
+        <Reveal delay={160}>
+          <p className="sub" style={{ fontSize: 'clamp(18px, 4vw, 20px)', lineHeight: 1.6, color: '#b8b8b8', maxWidth: 680, marginTop: 24 }}>
+            No es una campaña. No es un retainer. Es una arquitectura que queda <span style={{ color: '#fff' }}>instalada en tu empresa</span> y sigue funcionando cuando nos vamos.
+          </p>
+        </Reveal>
+
+        <div style={{ marginTop: 72, display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: 48, alignItems: 'start' }}>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
+            {capas.map((c, i) => {
+              const isActive = i === active;
+              return (
+                <Reveal key={c.n} delay={i * 80}>
+                  <button onClick={() => setActive(i)} style={{
+                    width: '100%', textAlign: 'left', cursor: 'pointer',
+                    background: isActive ? 'var(--charcoal)' : '#151515',
+                    border: isActive ? '1px solid var(--blue)' : 'var(--border-light)',
+                    borderRadius: 12, padding: '22px 24px', display: 'flex', alignItems: 'center', gap: 20,
+                    transition: 'all var(--duration-normal) ease', position: 'relative', overflow: 'hidden'
+                  }}>
+                    {isActive && <div style={{ position: 'absolute', left: 0, top: 0, bottom: 0, width: 3, background: 'var(--blue)' }} />}
+                    <div className="sg" style={{
+                      width: 54, height: 54, display: 'grid', placeItems: 'center', flexShrink: 0,
+                      background: isActive ? 'var(--blue)' : 'rgba(23,157,255,0.1)',
+                      color: isActive ? 'var(--pure-black)' : 'var(--blue)',
+                      borderRadius: 10, fontSize: 22, fontWeight: 700,
+                      transition: 'all calc(var(--duration-normal)) ease'
+                    }}>{c.k}</div>
+                    <div style={{ flex: 1 }}>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+                        <div className="mono" style={{ fontSize: 10, color: '#888', letterSpacing: '.2em' }}>{c.n}</div>
+                        <div style={{ flex: 1, height: 1, background: 'rgba(255,255,255,0.08)' }} />
+                      </div>
+                      <div className="sg" style={{ fontSize: 20, fontWeight: 700, marginTop: 6, color: '#fff' }}>{c.t}</div>
+                      <div className="sub" style={{ fontSize: 16, color: '#888', marginTop: 4 }}>{c.s}</div>
+                    </div>
+                  </button>
+                </Reveal>
+              );
+            })}
+          </div>
+
+          <div style={{ position: 'sticky', top: 100 }}>
+            <Reveal>
+              <div className="card-dark">
+                <div style={{ padding: '28px 28px 20px', borderBottom: 'var(--border-subtle)' }}>
+                  <div className="mono" style={{ fontSize: 10, color: 'var(--blue)', letterSpacing: '.25em' }}>CAPA {capas[active].n}</div>
+                  <div className="sg" style={{ fontSize: 34, fontWeight: 700, marginTop: 8 }}>{capas[active].t}</div>
+                  <div style={{ fontSize: 15, color: '#b8b8b8', marginTop: 8 }}>{capas[active].b}</div>
+                </div>
+                <div style={{ padding: '22px 28px' }}>
+                  <div className="mono" style={{ fontSize: 10, color: '#666', letterSpacing: '.2em', textTransform: 'uppercase', marginBottom: 12 }}>Qué queda instalado</div>
+                  {capas[active].items.map((it, i) => (
+                    <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 12, padding: '10px 0', borderBottom: i < 2 ? '1px dashed rgba(255,255,255,0.06)' : 'none' }}>
+                      <div style={{ width: 16, height: 16, display: 'grid', placeItems: 'center', background: 'rgba(23,157,255,0.15)', borderRadius: 4, color: 'var(--blue)', fontSize: 11 }}>✓</div>
+                      <div style={{ fontSize: 15, color: '#e0e0e0' }}>{it}</div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </Reveal>
+
+            <Reveal delay={200}>
+              <div style={{
+                marginTop: 20, padding: '18px 22px', background: 'rgba(213,26,5,0.08)',
+                border: '1px solid rgba(213,26,5,0.35)', borderRadius: 10,
+                display: 'flex', alignItems: 'center', gap: 14
+              }}>
+                <div className="sg" style={{ fontSize: 12, fontWeight: 700, color: 'var(--red)', letterSpacing: '.15em', textTransform: 'uppercase' }}>Nota</div>
+                <div className="sub" style={{ fontSize: 16, color: '#e8e8e8' }}>Esto es un activo, no un servicio. Se queda en tu empresa.</div>
+              </div>
+            </Reveal>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/* ============================================================
+   CASO
+============================================================ */
+function Caso() {
+  const [r, v] = useInView(0.25);
+  const n1 = useCounter(230, v, 1800);
+  const n2 = useCounter(4.8, v, 1800);
+  const n3 = useCounter(48, v, 1800);
+  const n4 = useCounter(14, v, 1600);
+
+  return (
+    <section id="casos" ref={r} className="section-light">
+      <div className="container-narrow">
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: 40, alignItems: 'end' }}>
+          <div>
+            <Reveal>
+              <div className="section-label">
+                <span className="dot-blue">◼</span> &nbsp;03 · caso ancla
+              </div>
+            </Reveal>
+            <Reveal delay={80}>
+              <h2 className="headline-lg sg" style={{ margin: '18px 0 0' }}>
+                FERRIEPROFILES<br />
+                <span style={{ color: 'var(--blue)' }}>INSTALÓ EL SISTEMA.</span>
+              </h2>
+            </Reveal>
+          </div>
+          <Reveal delay={120}>
+            <p className="sub" style={{ fontSize: 'clamp(18px, 4vw, 20px)', lineHeight: 1.6, color: '#3a3a3a', maxWidth: 520, marginBottom: 10 }}>
+              Distribuidor de Hierro y Acero para empresas Fabricantes. Dependían del voz a voz. En 90 días instalamos las 4 capas. Números documentados, no vanidad.
+            </p>
+          </Reveal>
+        </div>
+
+        <div className="card-white" style={{ marginTop: 64, display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: 0 }}>
+          {[
+            { v: `+${Math.round(n1)}M`, l: 'COP documentados', c: 'var(--blue)', sub: 'en resultados atribuibles' },
+            { v: `${n2.toFixed(1)}×`, l: 'ROAS promedio', c: 'var(--pure-black)', sub: 'trimestre 1 post-instalación' },
+            { v: `$${Math.round(n3)}k`, l: 'CPL calificado', c: 'var(--pure-black)', sub: 'bajó un 62% vs. baseline' },
+            { v: `${Math.round(n4)}/sem`, l: 'Leads calificados', c: 'var(--red)', sub: 'consistentes, desde semana 6' }
+          ].map((m, i) => (
+            <div key={i} style={{ padding: '36px 28px', borderRight: '1px solid #E8E8E8', borderBottom: '1px solid #E8E8E8', minHeight: 180 }}>
+              <div className="sg" style={{ fontSize: 'clamp(44px, 6vw, 56px)', fontWeight: 700, color: m.c, lineHeight: 1 }}>{m.v}</div>
+              <div className="sg" style={{ fontSize: 16, color: 'var(--pure-black)', marginTop: 14, fontWeight: 600 }}>{m.l}</div>
+              <div style={{ fontSize: 13, color: '#777', marginTop: 4, lineHeight: 1.45 }}>{m.sub}</div>
+            </div>
+          ))}
+        </div>
+
+        <div style={{ marginTop: 40, display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: 20 }}>
+          <Reveal delay={300}>
+            <div className="mono" style={{ fontSize: 12, color: '#888' }}>@adsbigger · caso 01/03 del trimestre</div>
+          </Reveal>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/* ============================================================
+   PROCESO 90d
+============================================================ */
+function Proceso() {
+  const steps = [
+    { n: '01', rng: 'Día 1–7', t: 'Diagnóstico cerrado', b: 'BANT real. Auditoría de oferta, pipeline actual y procesos. Si no encaja, no arrancamos.' },
+    { n: '02', rng: 'Día 8–30', t: 'Capa Adquisición', b: 'Oferta + creativos + paid media instalados. Primer flujo semanal de leads entrando.' },
+    { n: '03', rng: 'Día 31–55', t: 'Capa Calificación', b: 'Formularios, scoring y descarte. Solo leads con presupuesto y timing llegan a ventas.' },
+    { n: '04', rng: 'Día 56–80', t: 'Capa Cierre', b: 'Playbook, CRM y seguimientos. El equipo cierra con proceso, no con ánimo.' },
+    { n: '05', rng: 'Día 81–90', t: 'Control + handover', b: 'Dashboard vivo. El dueño ve pipeline en 2 min. Sistema entregado. Queda corriendo.' }
+  ];
+
+  return (
+    <section id="proceso" className="section-dark">
+      <div className="container-narrow">
+        <Reveal>
+          <div className="section-label">
+            <span className="dot-blue">◼</span> &nbsp;04 · cómo se instala
+          </div>
+        </Reveal>
+        <Reveal delay={80}>
+          <h2 className="headline-lg sg" style={{ margin: '18px 0 0', maxWidth: 1000 }}>
+            90 DÍAS. <span style={{ color: 'var(--blue)' }}>5 ENTREGABLES</span>.<br />CERO REPORTES DE VANIDAD.
+          </h2>
+        </Reveal>
+
+        <div style={{ position: 'relative', marginTop: 72 }}>
+          {/* timeline rail (hidden on mobile) */}
+          <div className="process-rail" style={{ display: 'none' }} />
+          
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: 24 }}>
+            {steps.map((s, i) => (
+              <Reveal key={s.n} delay={i * 100}>
+                <div style={{ background: '#1a1a1a', border: 'var(--border-light)', borderRadius: 12, padding: '20px', position: 'relative', minHeight: 240 }}>
+                  <div style={{
+                    position: 'absolute', top: -14, left: 20, width: 40, height: 40, borderRadius: 99, 
+                    background: 'var(--pure-black)', border: '2px solid var(--blue)',
+                    display: 'grid', placeItems: 'center', color: 'var(--blue)', fontFamily: 'var(--font-headline)', fontWeight: 700, fontSize: 14,
+                    boxShadow: '0 0 0 4px var(--obsidian)'
+                  }}>{s.n}</div>
+                  <div className="mono" style={{ fontSize: 11, color: 'var(--blue)', letterSpacing: '.15em', marginTop: 32 }}>{s.rng}</div>
+                  <div className="sg" style={{ fontSize: 20, fontWeight: 700, marginTop: 8 }}>{s.t}</div>
+                  <div style={{ fontSize: 14, color: '#9b9b9b', marginTop: 10, lineHeight: 1.5 }}>{s.b}</div>
+                </div>
+              </Reveal>
+            ))}
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/* ============================================================
+   GARANTIA
+============================================================ */
+function Garantia() {
+  return (
+    <section id="garantia" className="section-red">
+      <div className="container-narrow" style={{ position: 'relative' }}>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: 56, alignItems: 'center' }}>
+          <div>
+            <Reveal>
+              <div className="mono" style={{ fontSize: 11, letterSpacing: '.25em', textTransform: 'uppercase', opacity: .75 }}>
+                ◼ &nbsp;05 · la garantía
+              </div>
+            </Reveal>
+            <Reveal delay={80}>
+              <h2 className="headline-lg sg" style={{ margin: '20px 0 0' }}>
+                CLIENTES CALIFICADOS<br />
+                CADA SEMANA —<br />
+                <span style={{ background: 'var(--pure-black)', color: 'var(--yellow)', padding: '0 12px', display: 'inline-block', marginTop: 8 }}>O TRABAJAMOS GRATIS.</span>
+              </h2>
+            </Reveal>
+            <Reveal delay={180}>
+              <p className="sub" style={{ fontSize: 'clamp(18px, 4vw, 20px)', lineHeight: 1.55, marginTop: 28, maxWidth: 560 }}>
+                No es una promesa de marketing. Es la cláusula que firmamos. Si pasada la semana 6 no hay leads calificados entrando, seguimos instalando sin cobrar un peso más hasta lograrlo.
+              </p>
+            </Reveal>
+          </div>
+
+          <Reveal delay={220}>
+            <div style={{ background: 'var(--pure-black)', borderRadius: 14, padding: '32px', border: '1px solid rgba(255,255,255,0.1)' }}>
+              <div className="sg" style={{ fontSize: 11, letterSpacing: '.25em', color: 'var(--yellow)', fontWeight: 700, textTransform: 'uppercase' }}>Cláusula · §04</div>
+              <div className="sg" style={{ fontSize: 22, fontWeight: 700, marginTop: 14, lineHeight: 1.3 }}>
+                Si tras 42 días no hay pipeline calificado semanal, adsBigger continúa la instalación sin facturación hasta el hito.
+              </div>
+            </div>
+          </Reveal>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/* ============================================================
+   CTA FINAL
+============================================================ */
+function CTAFinal() {
+  return (
+    <section id="cta" style={{ background: 'var(--pure-black)', padding: '140px var(--padding-x) 120px', position: 'relative', overflow: 'hidden' }}>
+      <div className="glow-blue" style={{ top: '-20%', left: '50%', transform: 'translateX(-50%)', width: 800, height: 500 }} />
+      <div className="container" style={{ position: 'relative', textAlign: 'center' }}>
+        <Reveal>
+          <div className="mono" style={{ fontSize: 11, color: 'var(--blue)', letterSpacing: '.3em', textTransform: 'uppercase' }}>
+            · 06 · siguiente paso ·
+          </div>
+        </Reveal>
+        <Reveal delay={80}>
+          <h2 className="headline-xl sg" style={{ margin: '24px 0 0' }}>
+            DIAGNÓSTICO<br />
+            <span style={{ color: 'var(--blue)' }}>EN 45 MINUTOS.</span>
+          </h2>
+        </Reveal>
+        <Reveal delay={160}>
+          <p className="sub" style={{ fontSize: 'clamp(18px, 4vw, 20px)', lineHeight: 1.55, color: '#b8b8b8', marginTop: 24, maxWidth: 600, marginLeft: 'auto', marginRight: 'auto' }}>
+            Sin pitch. Revisamos tu oferta, tu pipeline actual y qué capa del sistema te falta. Si encajas, entras al trimestre. Si no, te vas con un plan.
+          </p>
+        </Reveal>
+
+        <Reveal delay={260}>
+          <div className="btn-group" style={{ marginTop: 44, display: 'flex', justifyContent: 'center', gap: 14, flexWrap: 'wrap' }}>
+            <a href="/diagnostico" className="btn btn-red sg">
+              Agenda tu diagnóstico gratis →
+            </a>
+            <a href="/cuellos-de-botella" className="btn btn-ghost sg">
+              Descargar 5 cuellos (PDF)
+            </a>
+          </div>
+        </Reveal>
+      </div>
+    </section>
+  );
+}
+
+function App() {
+  return (
+    <>
+      <Navbar />
+      <Hero />
+      <Marquee />
+      <Problema />
+      <Sistema />
+      <Caso />
+      <Proceso />
+      <Garantia />
+      <CTAFinal />
+      <Footer />
+      <WhatsAppFab />
+    </>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+</script>
+</body>
+</html>
