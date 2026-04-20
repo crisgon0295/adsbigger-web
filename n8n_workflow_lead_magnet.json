@@ -1,0 +1,68 @@
+{
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "adsbigger-lead-magnet",
+        "responseMode": "onReceived",
+        "options": {}
+      },
+      "name": "Webhook LeadMagnet",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [250, 300]
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "INSERT_GOOGLE_SHEET_ID_HERE",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "Hoja 1",
+          "mode": "name"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Fecha": "={{$now}}",
+            "Nombre": "={{$json.body.nombre}}",
+            "Email": "={{$json.body.email}}",
+            "Empresa": "={{$json.body.empresa}}"
+          }
+        },
+        "options": {}
+      },
+      "name": "Google Sheets",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.1,
+      "position": [500, 200]
+    },
+    {
+      "parameters": {
+        "sendTo": "={{$json.body.email}}",
+        "subject": "Tu diagnóstico: Los 5 Cuellos de Botella (adsBigger)",
+        "message": "Hola {{$json.body.nombre}},\\n\\nAquí tienes el recurso que solicitaste:\\n<br><br>\\n<b>Descargar PDF:</b> [Link al PDF temporal/Drive]<br><br>\\nSaludos,\\nCris",
+        "appendAttribution": false,
+        "options": {}
+      },
+      "name": "Gmail",
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [500, 400]
+    }
+  ],
+  "connections": {
+    "Webhook LeadMagnet": {
+      "main": [
+        [
+          { "node": "Google Sheets", "type": "main", "index": 0 },
+          { "node": "Gmail", "type": "main", "index": 0 }
+        ]
+      ]
+    }
+  }
+}

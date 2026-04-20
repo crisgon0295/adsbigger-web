@@ -234,7 +234,20 @@ function EmailModal({ open, onClose }) {
             <div className="sg" style={{ fontSize: 34, lineHeight: 1.05, marginTop: 10 }}>¿A qué correo te lo enviamos?</div>
             <p className="sub" style={{ fontSize: 17, color: '#b8b8b8', marginTop: 12, fontStyle: 'italic' }}>Llega en 2 minutos. Sin spam.</p>
             
-            <form onSubmit={e => { e.preventDefault(); if (valid) setSent(true); }} style={{ marginTop: 28, display: 'flex', flexDirection: 'column', gap: 16 }}>
+            <form onSubmit={async e=>{
+              e.preventDefault(); 
+              if(valid) {
+                setSent(true);
+                try {
+                  await fetch('https://devn8n.adsbigger.cloud/webhook/adsbigger-lead-magnet', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ nombre: form.nombre, email: form.email, empresa: form.empresa }),
+                    mode: 'no-cors'
+                  });
+                } catch(err) { console.error('Webhook error:', err); }
+              }
+            }} style={{marginTop:28,display:'flex',flexDirection:'column',gap:16}}>
               <div>
                 <div className="input-label">Tu nombre</div>
                 <input value={form.nombre} onChange={e => setForm({ ...form, nombre: e.target.value })} autoFocus className="input" />

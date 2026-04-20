@@ -332,9 +332,21 @@ function Result({ scores, email, onRestart }) {
   const ranked = scores.map((s, i) => ({ s, i })).sort((a, b) => b.s - a.s);
   const primary = BOTTLENECKS[ranked[0].i];
 
-  const handleQualifySubmit = (data) => {
-    // Redirigir a WhatsApp con texto prellenado
+  const handleQualifySubmit = async (data) => {
+    // Redirigir a WhatsApp con texto prellenado mientras se ejecuta el webhook
     const txt = `Hola,%20acabo%20de%20hacer%20el%20diagnóstico.%20Soy%20${encodeURI(data.name)}%20de%20${encodeURI(data.empresa)}.%20Mi%20puntaje%20fue%20${total}.`;
+    
+    // Disparar Webhook silenciosamente
+    try {
+      await fetch('https://devn8n.adsbigger.cloud/webhook/adsbigger-bant', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ ...data, email, puntaje: total, nivel: tier.lvl }),
+        mode: 'no-cors'
+      });
+    } catch(err) { console.error('Webhook error:', err); }
+
+    // Redirección inmediata para no frenar la experiencia
     window.location.href = `https://wa.me/573057670817?text=${txt}`;
   };
 
