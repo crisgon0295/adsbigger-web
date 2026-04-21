@@ -255,6 +255,7 @@ function EmailModal({ open, onClose }) {
               e.preventDefault(); 
               if(valid) {
                 setSent(true);
+                if(window.fbq) window.fbq('track', 'Lead');
                 try {
                   await fetch('https://devn8n.adsbigger.cloud/webhook/adsbigger-lead-magnet', {
                     method: 'POST',

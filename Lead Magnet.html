@@ -243,7 +243,21 @@ function EmailModal({open, onClose}){
             <div className="mono" style={{fontSize:11,color:'#D51A05',letterSpacing:'.25em',textTransform:'uppercase'}}>descarga gratuita</div>
             <div className="sg" style={{fontSize:34,lineHeight:1.05,marginTop:10}}>¿A qué correo te enviamos el PDF?</div>
             <p className="sub" style={{fontSize:17,color:'#b8b8b8',marginTop:12,fontStyle:'italic'}}>Llega en 2 minutos. Sin spam. Cancelas cuando quieras.</p>
-            <form onSubmit={e=>{e.preventDefault(); if(valid) setSent(true);}} style={{marginTop:24,display:'flex',flexDirection:'column',gap:12}}>
+            <form onSubmit={async e=>{
+              e.preventDefault(); 
+              if(valid) {
+                setSent(true);
+                if(window.fbq) window.fbq('track', 'Lead');
+                try {
+                  await fetch('https://devn8n.adsbigger.cloud/webhook/adsbigger-lead-magnet', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ nombre: form.nombre, email: form.email, empresa: form.empresa }),
+                    mode: 'no-cors'
+                  });
+                } catch(err) { console.error('Webhook error:', err); }
+              }
+            }} style={{marginTop:24,display:'flex',flexDirection:'column',gap:12}}>
               {[['nombre','Tu nombre'],['email','Email de trabajo'],['empresa','Empresa (opcional)']].map(([k,l])=>
                 <div key={k}>
                   <div className="mono" style={{fontSize:10,color:'#888',letterSpacing:'.2em',textTransform:'uppercase',marginBottom:5}}>{l}</div>

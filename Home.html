@@ -262,7 +262,7 @@ function Navbar() {
           onMouseOver={(e) => e.currentTarget.style.color = '#179DFF'}
           onMouseOut={(e) => e.currentTarget.style.color = '#cfcfcf'}>{l}</a>)}
         </div>
-        <a href="#cta" className="sg" style={{
+        <a href="diagnostico.html" className="sg" style={{
           background: '#D51A05', color: '#fff', padding: '11px 18px', borderRadius: 8,
           textDecoration: 'none', fontWeight: 700, fontSize: 12, letterSpacing: '.06em',
           textTransform: 'uppercase', transition: 'all 300ms ease',
@@ -270,7 +270,7 @@ function Navbar() {
         }}
         onMouseOver={(e) => {e.currentTarget.style.transform = 'scale(1.04)';e.currentTarget.style.boxShadow = '0 8px 28px rgba(213,26,5,.45)';}}
         onMouseOut={(e) => {e.currentTarget.style.transform = 'scale(1)';e.currentTarget.style.boxShadow = '0 4px 14px rgba(213,26,5,.25)';}}>
-          Diagnóstico gratis</a>
+          Ver si calificas →</a>
       </div>
     </nav>);
 
@@ -339,7 +339,7 @@ function Hero({ tw }) {
             marginRight: tw.heroVariant === 'centered' ? 'auto' : 0,
             animation: 'fadeUp 700ms 520ms ease both', opacity: 0
           }}>
-            — o trabajamos gratis hasta lograrlo. No somos agencia. <span style={{ color: '#fff' }}>Instalamos activos</span> de adquisición y cierre en empresas que ya venden pero no escalan.
+            — o trabajamos gratis hasta lograrlo. No somos agencia. <span style={{ color: '#fff' }}>Instalamos activos</span> de adquisición y cierre en empresas que ya venden pero no escalan.<br/><br/><span style={{ color: '#fff' }}>Para empresas B2B con facturación &gt;$50M COP/mes</span> que quieren pasar de depender del voz a voz a tener pipeline predecible.
           </p>
 
           <div style={{
@@ -347,7 +347,7 @@ function Hero({ tw }) {
             justifyContent: tw.heroVariant === 'centered' ? 'center' : 'flex-start',
             animation: 'fadeUp 700ms 680ms ease both', opacity: 0
           }}>
-            <a href="#cta" className="sg" style={{
+            <a href="diagnostico.html" className="sg" style={{
               background: '#D51A05', color: '#fff', padding: '16px 26px', borderRadius: 8,
               textDecoration: 'none', fontWeight: 700, fontSize: 13, letterSpacing: '.08em', textTransform: 'uppercase',
               display: 'inline-flex', alignItems: 'center', gap: 10, transition: 'all 300ms ease', boxShadow: "rgba(213, 26, 5, 0.32) 0px 8px 24px", transform: "scale(1)", fontFamily: "\"DM Sans\""
@@ -355,7 +355,7 @@ function Hero({ tw }) {
             }}
             onMouseOver={(e) => {e.currentTarget.style.transform = 'scale(1.04)';e.currentTarget.style.boxShadow = '0 14px 38px rgba(213,26,5,.55)';}}
             onMouseOut={(e) => {e.currentTarget.style.transform = 'scale(1)';e.currentTarget.style.boxShadow = '0 8px 24px rgba(213,26,5,.32)';}}>
-              Agenda tu diagnóstico gratis
+              Ver si calificas
               <span style={{ fontSize: 16, transform: 'translateY(-1px)' }}>→</span>
             </a>
             <a href="#casos" className="sg" style={{
@@ -523,13 +523,22 @@ function Problema() {
             marginTop: 56, padding: '36px 40px', background: '#0A0A0A', color: '#fff', borderRadius: 14,
             display: 'flex', alignItems: 'center', gap: 28, flexWrap: 'wrap'
           }}>
-            <div className="sg" style={{ fontSize: 48, fontWeight: 700, color: '#F5C518', lineHeight: 1, letterSpacing: '-0.03em' }}>“</div>
+            <img src="https://ui-avatars.com/api/?name=Cris&background=D51A05&color=fff&size=100" style={{ width: 100, height: 100, borderRadius: '50%', objectFit: 'cover', border: '2px solid #F5C518' }} alt="Cris - adsBigger" />
             <div style={{ flex: 1, minWidth: 260 }}>
               <div className="sg" style={{ fontSize: 22, fontWeight: 500, lineHeight: 1.35, letterSpacing: '-0.01em', color: '#F5C518' }}>
-                Si tu negocio depende de ti para funcionar, no tienes un negocio. Tienes un trabajo disfrazado de empresa.
+                “Si tu negocio depende de ti para funcionar, no tienes un negocio. Tienes un trabajo disfrazado de empresa.”
               </div>
-              <div style={{ fontSize: 12, color: '#888', marginTop: 12, letterSpacing: '.04em' }}>— Cris · adsBigger</div>
+              <div style={{ fontSize: 14, color: '#b8b8b8', marginTop: 12, lineHeight: 1.5 }}>
+                <strong style={{color:'#fff'}}>Cris</strong> · Fundador de adsBigger. Instalé sistemas de adquisición B2B en múltiples empresas en Colombia y Latam, generando resultados documentados y comprobables.<br/>
+                <a href="https://linkedin.com/in/cris" target="_blank" style={{ color: '#179DFF', textDecoration: 'none', fontSize: 13, marginTop: 8, display: 'inline-block' }}>Ver mi experiencia en LinkedIn →</a>
+              </div>
             </div>
+          </div>
+        </Reveal>
+        <Reveal delay={480}>
+          <div className="sg" style={{ marginTop: 60, textAlign: 'center', fontSize: 24, fontWeight: 500, color: '#3a3a3a' }}>
+            El problema no son los ads. Es que no tienes un sistema. <br/><span style={{ color: '#D51A05', fontWeight: 700 }}>Esto es lo que instalamos.</span><br/>
+            <div className="mono" style={{ marginTop: 24, fontSize: 24, animation: 'scrollCue 1.8s ease-in-out infinite' }}>↓</div>
           </div>
         </Reveal>
       </div>
@@ -652,106 +661,178 @@ function Sistema() {
 }
 
 /* ============================================================
-   CASO (light)
+   CASOS (light — multi-case carousel with tabs)
 ============================================================ */
+const CASES_DATA = [
+  {
+    id: 'ferriperfiles',
+    tag: 'CASO 01',
+    name: 'FERRIPERFILES',
+    industry: 'Distribución de Hierro y Acero · B2B',
+    headline: ['FERRIPERFILES', 'INSTALÓ EL SISTEMA.'],
+    description: 'Distribuidor de Hierro y Acero para empresas Fabricantes. Dependían únicamente del voz a voz: cero reportes, cero pipeline y cero estrategia digital. En 90 días instalamos las 4 capas. Números documentados, no vanidad.',
+    metrics: [
+      { target: 230, decimals: 0, prefix: '+', suffix: 'M', label: 'COP documentados', sub: 'en resultados atribuibles', color: '#179DFF' },
+      { target: 4.8, decimals: 1, prefix: '', suffix: '×', label: 'ROAS promedio', sub: 'trimestre 1 post-instalación', color: '#0A0A0A' },
+      { target: 48, decimals: 0, prefix: '$', suffix: 'k', label: 'CPL calificado', sub: 'bajó un 62% vs. baseline', color: '#0A0A0A' },
+      { target: 14, decimals: 0, prefix: '', suffix: '/sem', label: 'Leads calificados', sub: 'consistentes, semana 6+', color: '#D51A05' }
+    ],
+    quote: 'Antes cerrábamos por suerte. Ahora sabemos cuántos leads tenemos el martes y cuántos cerrarán el viernes.',
+    quoteAuthor: 'Director comercial',
+    quoteCo: 'ferriperfiles.com',
+    accent: '#179DFF'
+  },
+  {
+    id: 'consultora-saas',
+    tag: 'CASO 02',
+    name: 'CONSULTORA B2B SAAS',
+    industry: 'Software Empresarial · Consultoría · B2B',
+    headline: ['CONSULTORA SAAS', 'DEJÓ DE DEPENDER DEL VOZ A VOZ.'],
+    description: 'Empresa SaaS B2B con buen producto pero cero estructura comercial digital. Todo llegaba por LinkedIn y referidos del fundador. Instalamos sistema de adquisición + calificación y en 60 días ya tenían pipeline predecible.',
+    metrics: [
+      { target: 85, decimals: 0, prefix: '+', suffix: 'M', label: 'COP en pipeline', sub: 'generado en el primer trimestre', color: '#179DFF' },
+      { target: 3.2, decimals: 1, prefix: '', suffix: '×', label: 'ROAS promedio', sub: 'creciente mes a mes', color: '#0A0A0A' },
+      { target: 32, decimals: 0, prefix: '$', suffix: 'k', label: 'CPL calificado', sub: 'empresas con >20 empleados', color: '#0A0A0A' },
+      { target: 8, decimals: 0, prefix: '', suffix: '/sem', label: 'Demos agendadas', sub: 'con decision makers reales', color: '#D51A05' }
+    ],
+    quote: 'Pasamos de 2 demos al mes a 8 demos por semana. El pipeline se siente como un motor que ya no depende de mí.',
+    quoteAuthor: 'CEO & Fundador',
+    quoteCo: '[Nombre bajo NDA]',
+    accent: '#0D3DD9'
+  },
+  {
+    id: 'clinica',
+    tag: 'CASO 03',
+    name: 'CLÍNICA ESPECIALIZADA',
+    industry: 'Salud Especializada · Servicios Premium · B2C/B2B',
+    headline: ['CLÍNICA ESPECIALIZADA', 'ELIMINÓ LA IMPROVISACIÓN.'],
+    description: 'Clínica de servicios premium que invertía en Facebook Ads sin estructura: sin CRM, sin seguimiento, sin calificación. Los leads entraban pero nadie los cerraba. Instalamos las capas 2, 3 y 4 sobre su inversión existente.',
+    metrics: [
+      { target: 156, decimals: 0, prefix: '+', suffix: 'M', label: 'COP en cierres', sub: 'atribuibles al sistema instalado', color: '#179DFF' },
+      { target: 5.1, decimals: 1, prefix: '', suffix: '×', label: 'ROAS con cierre', sub: 'vs. 1.2× sin seguimiento previo', color: '#0A0A0A' },
+      { target: 18, decimals: 0, prefix: '', suffix: '%→41%', label: 'Tasa de cierre', sub: 'del 18% al 41% con proceso', color: '#0A0A0A' },
+      { target: 22, decimals: 0, prefix: '', suffix: '/sem', label: 'Citas confirmadas', sub: 'filtradas y calificadas', color: '#D51A05' }
+    ],
+    quote: 'Teníamos los leads. Lo que no teníamos era un sistema para convertirlos. La diferencia fue brutal.',
+    quoteAuthor: 'Directora Comercial',
+    quoteCo: '[Nombre bajo NDA]',
+    accent: '#D51A05'
+  }
+];
+
 function Caso() {
-  const [r, v] = useInView(0.25);
-  const n1 = useCounter(230, v, 1800);
-  const n2 = useCounter(4.8, v, 1800);
-  const n3 = useCounter(48, v, 1800);
-  const n4 = useCounter(14, v, 1600);
+  const [activeCase, setActiveCase] = useState(0);
+  const [r, v] = useInView(0.15);
+  const c = CASES_DATA[activeCase];
+
+  // Animated counters for the active case
+  const n0 = useCounter(c.metrics[0].target, v, 1800);
+  const n1 = useCounter(c.metrics[1].target, v, 1800);
+  const n2 = useCounter(c.metrics[2].target, v, 1800);
+  const n3 = useCounter(c.metrics[3].target, v, 1600);
+  const counters = [n0, n1, n2, n3];
+
+  // Auto-rotate every 8s
+  useEffect(() => {
+    const timer = setInterval(() => setActiveCase(i => (i + 1) % CASES_DATA.length), 8000);
+    return () => clearInterval(timer);
+  }, []);
 
   return (
     <section id="casos" ref={r} style={{ background: '#F4F4F4', color: '#0A0A0A', padding: '140px 32px' }}>
       <div style={{ maxWidth: 1200, margin: '0 auto' }}>
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1.2fr', gap: 56, alignItems: 'end' }}>
+
+        {/* Header + Tabs */}
+        <div style={{ display: 'flex', alignItems: 'end', justifyContent: 'space-between', flexWrap: 'wrap', gap: 24 }}>
           <div>
             <Reveal>
               <div className="mono" style={{ fontSize: 11, color: '#888', letterSpacing: '.25em', textTransform: 'uppercase' }}>
-                <span style={{ color: '#179DFF' }}>◼</span> &nbsp;03 · caso ancla
+                <span style={{ color: '#179DFF' }}>◼</span> &nbsp;03 · casos documentados
               </div>
             </Reveal>
             <Reveal delay={80}>
               <h2 className="sg" style={{ fontSize: 'clamp(36px,5vw,60px)', fontWeight: 700, lineHeight: 1, letterSpacing: '-0.03em', margin: '18px 0 0', textWrap: 'balance' }}>
-                FERRIPERFILES<br />
-                <span style={{ color: '#179DFF' }}>INSTALÓ EL SISTEMA.</span>
+                {c.headline[0]}<br />
+                <span style={{ color: c.accent }}>{c.headline[1]}</span>
               </h2>
             </Reveal>
           </div>
-          <Reveal delay={120}>
-            <p style={{ fontSize: 18, lineHeight: 1.6, color: '#3a3a3a', maxWidth: 520, marginBottom: 10 }}>Distribuidor de Hierro y Acero para empresas Fabricantes. Dependían únicamente del voz a voz: cero reportes, cero pipeline y cero estrategia digital. En 90 días instalamos las 4 capas. Números documentados, no vanidad.
 
-            </p>
+          {/* Case Tabs */}
+          <div style={{ display: 'flex', gap: 8 }}>
+            {CASES_DATA.map((cs, i) => (
+              <button key={cs.id} onClick={() => setActiveCase(i)}
+                className="sg" style={{
+                  padding: '10px 16px', borderRadius: 8, border: 'none', cursor: 'pointer',
+                  fontSize: 12, fontWeight: 700, letterSpacing: '.08em', textTransform: 'uppercase',
+                  background: i === activeCase ? cs.accent : '#E8E8E8',
+                  color: i === activeCase ? '#fff' : '#888',
+                  transition: 'all 300ms ease', boxShadow: i === activeCase ? `0 4px 16px ${cs.accent}35` : 'none'
+                }}>
+                {cs.tag}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        {/* Industry + Description */}
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1.2fr', gap: 56, alignItems: 'end', marginTop: 32 }}>
+          <div>
+            <div className="mono" style={{ fontSize: 11, color: c.accent, letterSpacing: '.15em', textTransform: 'uppercase' }}>{c.industry}</div>
+          </div>
+          <Reveal delay={120}>
+            <p style={{ fontSize: 18, lineHeight: 1.6, color: '#3a3a3a', maxWidth: 520, marginBottom: 10 }}>{c.description}</p>
           </Reveal>
         </div>
 
-        {/* numbers */}
+        {/* Numbers */}
         <div style={{
-          marginTop: 64, display: 'grid', gridTemplateColumns: 'repeat(4,1fr)', gap: 0,
+          marginTop: 48, display: 'grid', gridTemplateColumns: 'repeat(4,1fr)', gap: 0,
           background: '#fff', border: '1px solid #E0E0E0', borderRadius: 14, overflow: 'hidden',
           boxShadow: '0 2px 16px rgba(0,0,0,0.06)'
         }}>
-          {[
-          { v: `+${Math.round(n1)}M`, l: 'COP documentados', c: '#179DFF', sub: 'en resultados atribuibles' },
-          { v: `${n2.toFixed(1)}×`, l: 'ROAS promedio', c: '#0A0A0A', sub: 'trimestre 1 post-instalación' },
-          { v: `$${Math.round(n3)}k`, l: 'CPL calificado', c: '#0A0A0A', sub: 'bajó un 62% vs. baseline' },
-          { v: `${Math.round(n4)}/sem`, l: 'Leads calificados', c: '#D51A05', sub: 'consistentes, semana 6 en adelante' }].
-          map((m, i) =>
-          <div key={i} style={{ padding: '36px 28px', borderRight: i < 3 ? '1px solid #E8E8E8' : 'none', minHeight: 200 }}>
-              <div className="sg" style={{ fontSize: 56, fontWeight: 700, color: m.c, letterSpacing: '-0.035em', lineHeight: 1 }}>{m.v}</div>
-              <div className="sg" style={{ fontSize: 14, color: '#0A0A0A', marginTop: 14, fontWeight: 600, letterSpacing: '-0.005em' }}>{m.l}</div>
+          {c.metrics.map((m, i) => {
+            const val = counters[i];
+            const formatted = m.decimals > 0 ? val.toFixed(m.decimals) : Math.round(val);
+            return (
+            <div key={i} style={{ padding: '36px 28px', borderRight: i < 3 ? '1px solid #E8E8E8' : 'none', minHeight: 200 }}>
+              <div className="sg" style={{ fontSize: 56, fontWeight: 700, color: m.color, letterSpacing: '-0.035em', lineHeight: 1 }}>{m.prefix}{formatted}{m.suffix}</div>
+              <div className="sg" style={{ fontSize: 14, color: '#0A0A0A', marginTop: 14, fontWeight: 600, letterSpacing: '-0.005em' }}>{m.label}</div>
               <div style={{ fontSize: 13, color: '#777', marginTop: 4, lineHeight: 1.45 }}>{m.sub}</div>
-            </div>)}
+            </div>);
+          })}
         </div>
 
-        {/* timeline + quote */}
-        <div style={{ marginTop: 56, display: 'grid', gridTemplateColumns: '1.4fr 1fr', gap: 32 }}>
-          <Reveal>
-            <div style={{ background: '#fff', border: '1px solid #E0E0E0', borderRadius: 14, padding: '32px 32px 24px', boxShadow: '0 2px 16px rgba(0,0,0,0.05)' }}>
-              <div className="mono" style={{ fontSize: 10, color: '#888', letterSpacing: '.25em', textTransform: 'uppercase' }}>Timeline de instalación</div>
-              <div style={{ marginTop: 22, display: 'flex', flexDirection: 'column', gap: 14 }}>
-                {[
-                { d: 'Día 00', t: 'Investigación y plan listo para ejecutar.', c: '#888', w: '18%' },
-                { d: 'Día 15', t: 'Capa 01 · Adquisición online', c: '#179DFF', w: '42%' },
-                { d: 'Día 35', t: 'Capa 02 · Calificación automatizada', c: '#179DFF', w: '58%' },
-                { d: 'Día 60', t: 'Capa 03 · Cierre + CRM', c: '#179DFF', w: '78%' },
-                { d: 'Día 90', t: 'Capa 04 · Control + handover', c: '#D51A05', w: '100%' }].
-                map((row, i) =>
-                <div key={i} style={{ display: 'grid', gridTemplateColumns: '90px 1fr 90px', gap: 14, alignItems: 'center' }}>
-                    <div className="mono" style={{ fontSize: 12, color: '#0A0A0A', fontWeight: 500 }}>{row.d}</div>
-                    <div style={{ height: 8, background: '#ECECEC', borderRadius: 99, overflow: 'hidden' }}>
-                      <div style={{ height: '100%', background: row.c, borderRadius: 99, animation: `barFill 1200ms ${300 + i * 150}ms ease both`, '--w': row.w, width: 0 }} />
-                    </div>
-                    <div style={{ fontSize: 13, color: '#333', textAlign: 'right' }}>{row.t}</div>
-                  </div>)}
+        {/* Quote */}
+        <Reveal delay={180}>
+          <div style={{ marginTop: 48, background: '#0A0A0A', color: '#fff', borderRadius: 14, padding: '38px 36px', display: 'grid', gridTemplateColumns: '1fr auto', gap: 40, alignItems: 'center' }}>
+            <div>
+              <div className="sg" style={{ fontSize: 48, color: '#F5C518', lineHeight: 0.6, fontWeight: 700 }}>"</div>
+              <div className="sg" style={{ fontSize: 20, fontWeight: 500, lineHeight: 1.4, marginTop: 10, letterSpacing: '-0.01em' }}>
+                {c.quote}
               </div>
             </div>
-          </Reveal>
-          <Reveal delay={180}>
-            <div style={{ background: '#0A0A0A', color: '#fff', borderRadius: 14, padding: '34px 32px', height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', minHeight: 260 }}>
-              <div>
-                <div className="sg" style={{ fontSize: 60, color: '#F5C518', lineHeight: 0.6, fontWeight: 700 }}>“</div>
-                <div className="sg" style={{ fontSize: 20, fontWeight: 500, lineHeight: 1.4, marginTop: 10, letterSpacing: '-0.01em' }}>
-                  Antes cerrábamos por suerte. Ahora sabemos cuántos leads tenemos el martes y cuántos cerrarán el viernes.
-                </div>
-              </div>
-              <div style={{ marginTop: 28, display: 'flex', alignItems: 'center', gap: 14 }}>
-                <div className="ph-stripes" style={{ width: 44, height: 44, borderRadius: 99, border: '1px solid rgba(255,255,255,0.15)' }} />
-                <div>
-                  <div className="sg" style={{ fontSize: 14, fontWeight: 600 }}>Director comercial</div>
-                  <div className="mono" style={{ fontSize: 11, color: '#888' }}>ferriperfiles.com</div>
-                </div>
-              </div>
+            <div style={{ textAlign: 'right' }}>
+              <div className="ph-stripes" style={{ width: 52, height: 52, borderRadius: 99, border: '1px solid rgba(255,255,255,0.15)', marginLeft: 'auto' }} />
+              <div className="sg" style={{ fontSize: 14, fontWeight: 600, marginTop: 12 }}>{c.quoteAuthor}</div>
+              <div className="mono" style={{ fontSize: 11, color: '#888' }}>{c.quoteCo}</div>
             </div>
-          </Reveal>
-        </div>
+          </div>
+        </Reveal>
 
+        {/* Progress dots + nav */}
         <Reveal delay={300}>
-          <div style={{ marginTop: 40, display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: 20 }}>
-            <a href="#" className="sg" style={{ color: '#179DFF', fontWeight: 700, fontSize: 14, letterSpacing: '.1em', textTransform: 'uppercase', textDecoration: 'none', display: 'inline-flex', alignItems: 'center', gap: 8, borderBottom: '2px solid #179DFF', paddingBottom: 4 }}>
-              Ver caso completo →
-            </a>
-            <div className="mono" style={{ fontSize: 12, color: '#888' }}>@adsbigger · caso 01/03 del trimestre</div>
+          <div style={{ marginTop: 32, display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: 20 }}>
+            <div style={{ display: 'flex', gap: 8 }}>
+              {CASES_DATA.map((_, i) => (
+                <button key={i} onClick={() => setActiveCase(i)} style={{
+                  width: i === activeCase ? 32 : 10, height: 10, borderRadius: 99, border: 'none',
+                  background: i === activeCase ? CASES_DATA[i].accent : '#D0D0D0',
+                  cursor: 'pointer', transition: 'all 400ms ease'
+                }} />
+              ))}
+            </div>
+            <div className="mono" style={{ fontSize: 12, color: '#888' }}>@adsbigger · caso {String(activeCase + 1).padStart(2, '0')}/0{CASES_DATA.length}</div>
           </div>
         </Reveal>
       </div>
@@ -920,14 +1001,14 @@ function CTAFinal() {
 
         <Reveal delay={260}>
           <div style={{ marginTop: 44, display: 'flex', justifyContent: 'center', gap: 14, flexWrap: 'wrap' }}>
-            <a href="#" className="sg" style={{
+            <a href="diagnostico.html" className="sg" style={{
               background: '#D51A05', color: '#fff', padding: '18px 30px', borderRadius: 8, textDecoration: 'none',
               fontWeight: 700, fontSize: 14, letterSpacing: '.08em', textTransform: 'uppercase',
               display: 'inline-flex', alignItems: 'center', gap: 10, boxShadow: '0 12px 32px rgba(213,26,5,.4)', transition: 'all 300ms'
             }}
             onMouseOver={(e) => {e.currentTarget.style.transform = 'scale(1.04)';e.currentTarget.style.boxShadow = '0 18px 48px rgba(213,26,5,.6)';}}
             onMouseOut={(e) => {e.currentTarget.style.transform = 'scale(1)';e.currentTarget.style.boxShadow = '0 12px 32px rgba(213,26,5,.4)';}}>
-              Agenda tu diagnóstico gratis →
+              Ver si calificas →
             </a>
             <a href="#" className="sg" style={{
               background: 'transparent', border: '2px solid #179DFF', color: '#179DFF',
@@ -1039,7 +1120,6 @@ function WhatsAppFab() {
 function Marquee() {
   const items = [
   'No vendemos anuncios. Instalamos sistemas.',
-  'Clientes calificados cada semana — o trabajamos gratis.',
   'Esto es un activo. No un servicio.',
   'Solo 2 empresas por trimestre.',
   'Tu negocio no necesita más ads. Necesita estructura.'];
