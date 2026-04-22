@@ -7,12 +7,17 @@ Options -Indexes
 RewriteCond %{HTTPS} off
 RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
 
-# 2. Quitar .html en la barra de direcciones (Redirige .html a URL limpia)
+# 2. Quitar .html visible (Para páginas legacy)
 RewriteCond %{THE_REQUEST} ^[A-Z]{3,9}\ /([^.]+)\.html\ HTTP
 RewriteRule ^([^.]+)\.html$ /$1 [R=301,L]
 
-# 3. Oculta la extensión y sirve internamente el .html cuando llaman a la URL limpia
+# 3. Servir internamente el .html si existe (ej. Lead Magnet)
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteCond %{REQUEST_FILENAME}.html -f
 RewriteRule ^([^\.]+)$ $1.html [NC,L]
+
+# 4. Vite React Router SPA Fallback (Para Diagnostico, Home, etc)
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^ index.html [QSA,L]
