@@ -199,7 +199,7 @@ function Result({ scores, email, onRestart }) {
       }, {}),
       fecha: new Date().toISOString()
     };
-    fetch('https://devn8n.adsbigger.cloud/webhook/diagnostico-resultado', {
+    fetch('https://devn8n.adsbigger.cloud/webhook-test/diagnostico-resultado', {
       method: 'POST', headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(payload), mode: 'no-cors'
     }).catch(err => console.error('Diagnostic summary webhook error:', err));
@@ -209,7 +209,7 @@ function Result({ scores, email, onRestart }) {
   const handleQualifySubmit = async (data) => {
     if(window.fbq) window.fbq('track', 'Lead');
     try {
-      await fetch('https://devn8n.adsbigger.cloud/webhook/diagnostico-agendar', {
+      await fetch('https://devn8n.adsbigger.cloud/webhook-test/diagnostico-agendar', {
         method: 'POST', headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           ...data, email, puntaje: total, nivel: tier.lvl,
