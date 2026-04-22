@@ -176,7 +176,7 @@ function QualifyForm({ email, onSubmit }) {
   );
 }
 
-function Result({ scores, email, onRestart }) {
+function Result({ scores, answers, email, onRestart }) {
   const total = scores.reduce((a, b) => a + b, 0);
   const tier = TIERS.find(t => total >= t.r[0] && total <= t.r[1]) || TIERS[0];
   const ranked = scores.map((s, i) => ({ s, i })).sort((a, b) => b.s - a.s);
@@ -193,10 +193,12 @@ function Result({ scores, email, onRestart }) {
       cuello_principal_diagnostico: primary.diag,
       cuello_principal_solucion: primary.need,
       califica: tier.qualified,
-      scores_por_cuello: BOTTLENECKS.reduce((acc, b, i) => {
-        acc[`cuello_${b.n}`] = { nombre: b.t, puntaje: scores[i] };
-        return acc;
-      }, {}),
+      detalles_por_cuello: BOTTLENECKS.map((b, i) => ({
+        id: b.n,
+        nombre: b.t,
+        puntaje: scores[i],
+        fugas_marcadas: b.items.filter((_, itemIndex) => answers[i][itemIndex])
+      })),
       fecha: new Date().toISOString()
     };
     console.log('Final Result Reached - Triggering Summary Webhook...', payload);
@@ -356,7 +358,7 @@ export default function DiagnosticoPage() {
       {stage === 'email' && <EmailGate onContinue={onEmail} prefill={email} />}
       {stage === 'intro' && <Intro onStart={startQs} />}
       {stage === 'q' && <QuestionSection b={BOTTLENECKS[idx]} idx={idx} total={BOTTLENECKS.length} answers={answers[idx]} toggle={toggle} onNext={next} onPrev={prev} />}
-      {stage === 'result' && <Result scores={answers.map(r => r.filter(Boolean).length)} email={email} onRestart={restart} />}
+      {stage === 'result' && <Result scores={answers.map(r => r.filter(Boolean).length)} answers={answers} email={email} onRestart={restart} />}
     </>
   );
 }
