@@ -11,8 +11,16 @@ import CuellosPage from './pages/CuellosPage';
 function PageViewTracker() {
   const location = useLocation();
   useEffect(() => {
+    // Meta Pixel
     if (window.fbq) window.fbq('track', 'PageView');
-  }, [location.pathname]);
+    
+    // Google Analytics 4 (GA4)
+    if (window.gtag) {
+      window.gtag('event', 'page_view', {
+        page_path: location.pathname + location.search
+      });
+    }
+  }, [location.pathname, location.search]);
   return null;
 }
 

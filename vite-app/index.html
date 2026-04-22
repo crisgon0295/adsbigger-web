@@ -36,6 +36,17 @@
   fbq('track', 'PageView');
   </script>
   <!-- End Meta Pixel Code -->
+  
+  <!-- Google tag (gtag.js) GA4 -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-T0ES655EJK"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    // Se deshabilita el page_view automático inicial porque React (Vite) se encarga de enviarlo dinámicamente en App.jsx
+    gtag('config', 'G-T0ES655EJK', { send_page_view: false });
+  </script>
 </head>
 <body>
   <noscript><img height="1" width="1" style="display:none" src="https://www.facebook.com/tr?id=831795259401999&ev=PageView&noscript=1" /></noscript>
