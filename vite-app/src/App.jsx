@@ -14,9 +14,17 @@ function PageViewTracker() {
     // Meta Pixel
     if (window.fbq) window.fbq('track', 'PageView');
     
-    // Google Analytics 4 (GA4)
+    // Google Analytics 4 (gtag.js)
     if (window.gtag) {
       window.gtag('event', 'page_view', {
+        page_path: location.pathname + location.search
+      });
+    }
+
+    // Google Tag Manager (dataLayer)
+    if (window.dataLayer) {
+      window.dataLayer.push({
+        event: 'page_view',
         page_path: location.pathname + location.search
       });
     }
