@@ -199,24 +199,31 @@ function Result({ scores, email, onRestart }) {
       }, {}),
       fecha: new Date().toISOString()
     };
+    console.log('Final Result Reached - Triggering Summary Webhook...', payload);
     fetch('https://devn8n.adsbigger.cloud/webhook-test/diagnostico-resultado', {
-      method: 'POST', headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(payload), mode: 'no-cors'
-    }).catch(err => console.error('Diagnostic summary webhook error:', err));
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    })
+    .then(res => console.log('Summary Webhook Response:', res.status))
+    .catch(err => console.error('Diagnostic summary webhook error:', err));
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   /* ── Webhook 2: formulario final → lead que quiere agendar ── */
   const handleQualifySubmit = async (data) => {
     if(window.fbq) window.fbq('track', 'Lead');
+    console.log('Submitting Qualify Form...', data);
     try {
-      await fetch('https://devn8n.adsbigger.cloud/webhook-test/diagnostico-agendar', {
-        method: 'POST', headers: { 'Content-Type': 'application/json' },
+      const res = await fetch('https://devn8n.adsbigger.cloud/webhook-test/diagnostico-agendar', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           ...data, email, puntaje: total, nivel: tier.lvl,
           cuello_principal: primary.t, cuello_principal_numero: primary.n,
           fecha: new Date().toISOString()
-        }), mode: 'no-cors'
+        })
       });
+      console.log('Qualify Webhook Response:', res.status);
     } catch(err) { console.error('Webhook error:', err); }
     const calendlyUrl = new URL('https://calendly.com/agency-adsbigger/reunion-kick-off');
     calendlyUrl.searchParams.append('name', data.name);
