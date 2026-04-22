@@ -109,7 +109,7 @@ function EmailModal({ open, onClose }) {
                 if (window.fbq) window.fbq('track', 'Lead');
                 try {
                   console.log('Sending lead magnet webhook...', form);
-                  await fetch('https://devn8n.adsbigger.cloud/webhook/adsbigger-lead-magnet', {
+                  await fetch('https://devn8n.adsbigger.cloud/webhook-test/adsbigger-lead-magnet', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(form)
