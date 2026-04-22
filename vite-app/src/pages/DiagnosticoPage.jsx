@@ -202,7 +202,7 @@ function Result({ scores, answers, email, onRestart }) {
       fecha: new Date().toISOString()
     };
     console.log('Final Result Reached - Triggering Summary Webhook...', payload);
-    fetch('https://devn8n.adsbigger.cloud/webhook-test/diagnostico-resultado', {
+    fetch('https://devn8n.adsbigger.cloud/webhook/diagnostico-resultado', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(payload)
@@ -216,7 +216,7 @@ function Result({ scores, answers, email, onRestart }) {
     if(window.fbq) window.fbq('track', 'Lead');
     console.log('Submitting Qualify Form...', data);
     try {
-      const res = await fetch('https://devn8n.adsbigger.cloud/webhook-test/diagnostico-agendar', {
+      const res = await fetch('https://devn8n.adsbigger.cloud/webhook/diagnostico-agendar', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
