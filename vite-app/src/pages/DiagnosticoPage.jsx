@@ -176,19 +176,56 @@ function QualifyForm({ email, onSubmit }) {
   );
 }
 
-function Result({ scores, email, onRestart }) {
+function Result({ scores, answers, email, onRestart }) {
   const total = scores.reduce((a, b) => a + b, 0);
   const tier = TIERS.find(t => total >= t.r[0] && total <= t.r[1]) || TIERS[0];
   const ranked = scores.map((s, i) => ({ s, i })).sort((a, b) => b.s - a.s);
   const primary = BOTTLENECKS[ranked[0].i];
 
+  /* ── Webhook 1: enviar resumen del diagnóstico al completar ── */
+  useEffect(() => {
+    const payload = {
+      email,
+      puntaje_total: total,
+      nivel: tier.lvl,
+      cuello_principal: primary.t,
+      cuello_principal_numero: primary.n,
+      cuello_principal_diagnostico: primary.diag,
+      cuello_principal_solucion: primary.need,
+      califica: tier.qualified,
+      detalles_por_cuello: BOTTLENECKS.map((b, i) => ({
+        id: b.n,
+        nombre: b.t,
+        puntaje: scores[i],
+        fugas_marcadas: b.items.filter((_, itemIndex) => answers[i][itemIndex])
+      })),
+      fecha: new Date().toISOString()
+    };
+    console.log('Final Result Reached - Triggering Summary Webhook...', payload);
+    fetch('https://devn8n.adsbigger.cloud/webhook/diagnostico-resultado', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    })
+    .then(res => console.log('Summary Webhook Response:', res.status))
+    .catch(err => console.error('Diagnostic summary webhook error:', err));
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+
+  /* ── Webhook 2: formulario final → lead que quiere agendar ── */
   const handleQualifySubmit = async (data) => {
     if(window.fbq) window.fbq('track', 'Lead');
+    console.log('Submitting Qualify Form...', data);
     try {
-      await fetch('https://devn8n.adsbigger.cloud/webhook/adsbigger-bant', {
-        method: 'POST', headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ ...data, email, puntaje: total, nivel: tier.lvl }), mode: 'no-cors'
+      const res = await fetch('https://devn8n.adsbigger.cloud/webhook/diagnostico-agendar', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          ...data, email, puntaje: total, nivel: tier.lvl,
+          cuello_principal: primary.t, cuello_principal_numero: primary.n,
+          fecha: new Date().toISOString()
+        })
       });
+      console.log('Qualify Webhook Response:', res.status);
     } catch(err) { console.error('Webhook error:', err); }
     const calendlyUrl = new URL('https://calendly.com/agency-adsbigger/reunion-kick-off');
     calendlyUrl.searchParams.append('name', data.name);
@@ -199,40 +236,69 @@ function Result({ scores, email, onRestart }) {
 
   return (
     <>
+      {/* ── Resultado: Score & Nivel ── */}
       <section className="section-dark" style={{ minHeight: '60vh', display: 'flex', alignItems: 'center', position: 'relative', overflow: 'hidden' }}>
         <div style={{ position: 'absolute', top: -100, left: '50%', transform: 'translateX(-50%)', width: 900, height: 600, background: `radial-gradient(ellipse at center, ${tier.c}20, transparent 60%)`, filter: 'blur(40px)', pointerEvents: 'none' }} />
         <div className="container grid-responsive-even">
           <div>
-            <div className="mono" style={{ fontSize: 11, color: tier.c, letterSpacing: '.3em', textTransform: 'uppercase' }}>TU RESULTADO</div>
-            <h1 className="sg headline-xl" style={{ margin: '20px 0 0', textWrap: 'balance' }}>{tier.t}</h1>
-            <p className="sub" style={{ fontSize: 22, color: '#cfcfcf', marginTop: 24, fontStyle: 'italic', maxWidth: 560 }}>{tier.d}</p>
+            <Reveal><div className="mono" style={{ fontSize: 11, color: tier.c, letterSpacing: '.3em', textTransform: 'uppercase' }}>TU RESULTADO</div></Reveal>
+            <Reveal delay={100}><h1 className="sg headline-xl" style={{ margin: '20px 0 0', textWrap: 'balance' }}>{tier.t}</h1></Reveal>
+            <Reveal delay={200}><p className="sub" style={{ fontSize: 22, color: '#cfcfcf', marginTop: 24, fontStyle: 'italic', maxWidth: 560 }}>{tier.d}</p></Reveal>
           </div>
-          <div style={{ textAlign: 'center' }}>
-            <div className="mono" style={{ fontSize: 12, color: '#888', letterSpacing: '.25em', textTransform: 'uppercase' }}>Fugas detectadas</div>
-            <div className="sg" style={{ fontSize: 'clamp(100px,14vw,180px)', color: tier.c, lineHeight: 0.9, marginTop: 12 }}>{total}</div>
-            <div className="mono" style={{ fontSize: 16, color: '#666' }}>de 25</div>
+          <Reveal delay={300}>
+            <div style={{ textAlign: 'center' }}>
+              <div className="mono" style={{ fontSize: 12, color: '#888', letterSpacing: '.25em', textTransform: 'uppercase' }}>Fugas detectadas</div>
+              <div className="sg" style={{ fontSize: 'clamp(100px,14vw,180px)', color: tier.c, lineHeight: 0.9, marginTop: 12 }}>{total}</div>
+              <div className="mono" style={{ fontSize: 16, color: '#666' }}>de 25</div>
+            </div>
+          </Reveal>
+        </div>
+      </section>
+
+      {/* ── Desglose por cuello de botella ── */}
+      <section className="section-dark" style={{ borderTop: 'var(--border-subtle)', paddingTop: 64, paddingBottom: 64 }}>
+        <div className="container-narrow">
+          <Reveal><div className="mono" style={{ fontSize: 11, color: '#888', letterSpacing: '.25em', textTransform: 'uppercase', marginBottom: 28 }}>DESGLOSE POR CUELLO DE BOTELLA</div></Reveal>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: 16 }}>
+            {BOTTLENECKS.map((b, i) => {
+              const isPrimary = ranked[0].i === i;
+              return (
+                <Reveal key={b.n} delay={i * 80}>
+                  <div style={{ padding: '24px 20px', background: isPrimary ? 'rgba(213,26,5,0.12)' : '#151515', border: isPrimary ? '1px solid var(--red)' : 'var(--border-light)', borderRadius: 12, position: 'relative', overflow: 'hidden', height: '100%' }}>
+                    {isPrimary && <div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: 3, background: 'var(--red)' }} />}
+                    <div className="mono" style={{ fontSize: 10, color: b.color, letterSpacing: '.15em' }}>{b.n}</div>
+                    <div className="sg" style={{ fontSize: 16, fontWeight: 700, marginTop: 6 }}>{b.t}</div>
+                    <div className="sg" style={{ fontSize: 36, fontWeight: 700, color: b.color, marginTop: 12, lineHeight: 1 }}>{scores[i]}<span style={{ fontSize: 14, color: '#666' }}>/5</span></div>
+                    {isPrimary && <div className="mono" style={{ fontSize: 9, color: 'var(--red)', letterSpacing: '.15em', marginTop: 8, textTransform: 'uppercase' }}>▸ Cuello principal</div>}
+                  </div>
+                </Reveal>
+              );
+            })}
           </div>
         </div>
       </section>
 
+      {/* ── Cuello Principal Detectado + Formulario ── */}
       <section className="section-light">
         <div className="container-narrow">
-          <div className="mono" style={{ fontSize: 11, color: '#888', letterSpacing: '.25em', textTransform: 'uppercase' }}>CUELLO PRINCIPAL DETECTADO:</div>
-          <div style={{ background: 'var(--pure-black)', color: 'var(--white)', borderRadius: 14, padding: 48, position: 'relative', overflow: 'hidden', marginTop: 24 }}>
-            <div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: 4, background: primary.color }} />
-            <div style={{ display: 'flex', alignItems: 'baseline', gap: 16 }}>
-              <div className="sg" style={{ fontSize: 56, color: primary.color, lineHeight: 1 }}>{primary.n}</div>
-              <div className="sg headline-md">{primary.t}</div>
+          <Reveal><div className="mono" style={{ fontSize: 11, color: '#888', letterSpacing: '.25em', textTransform: 'uppercase' }}>CUELLO PRINCIPAL DETECTADO:</div></Reveal>
+          <Reveal delay={100}>
+            <div style={{ background: 'var(--pure-black)', color: 'var(--white)', borderRadius: 14, padding: 48, position: 'relative', overflow: 'hidden', marginTop: 24 }}>
+              <div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: 4, background: primary.color }} />
+              <div style={{ display: 'flex', alignItems: 'baseline', gap: 16 }}>
+                <div className="sg" style={{ fontSize: 56, color: primary.color, lineHeight: 1 }}>{primary.n}</div>
+                <div className="sg headline-md">{primary.t}</div>
+              </div>
+              <div style={{ marginTop: 28 }}>
+                <div className="input-label">Diagnóstico</div>
+                <p className="sub" style={{ fontSize: 20, fontStyle: 'italic', color: '#e0e0e0', marginTop: 12, lineHeight: 1.5 }}>{primary.diag}</p>
+              </div>
+              <div style={{ marginTop: 32, padding: 24, background: 'rgba(23,157,255,0.08)', border: '1px solid rgba(23,157,255,0.3)', borderRadius: 10 }}>
+                <div className="mono" style={{ fontSize: 11, color: 'var(--blue)', letterSpacing: '.2em', textTransform: 'uppercase' }}>Lo que necesitas instalar</div>
+                <div style={{ fontSize: 16, color: '#cfe7ff', marginTop: 10, lineHeight: 1.5 }}>{primary.need}</div>
+              </div>
             </div>
-            <div style={{ marginTop: 28 }}>
-              <div className="input-label">Diagnóstico</div>
-              <p className="sub" style={{ fontSize: 20, fontStyle: 'italic', color: '#e0e0e0', marginTop: 12, lineHeight: 1.5 }}>{primary.diag}</p>
-            </div>
-            <div style={{ marginTop: 32, padding: 24, background: 'rgba(23,157,255,0.08)', border: '1px solid rgba(23,157,255,0.3)', borderRadius: 10 }}>
-              <div className="mono" style={{ fontSize: 11, color: 'var(--blue)', letterSpacing: '.2em', textTransform: 'uppercase' }}>Lo que necesitas instalar</div>
-              <div style={{ fontSize: 16, color: '#cfe7ff', marginTop: 10, lineHeight: 1.5 }}>{primary.need}</div>
-            </div>
-          </div>
+          </Reveal>
 
           {tier.qualified ? (
             <QualifyForm email={email} onSubmit={handleQualifySubmit} />
@@ -265,6 +331,15 @@ export default function DiagnosticoPage() {
   useEffect(() => { window.scrollTo(0, 0); }, []);
 
   useEffect(() => {
+    let step = 0;
+    if (stage === 'intro') step = 1;
+    if (stage === 'q') step = 2 + idx;
+    if (stage === 'result') step = 7;
+    const progress = Math.min(100, Math.round((step / 7) * 100));
+    window.dispatchEvent(new CustomEvent('bant_progress', { detail: progress }));
+  }, [stage, idx]);
+
+  useEffect(() => {
     try {
       const saved = JSON.parse(localStorage.getItem('adsb_bant') || 'null');
       if (saved) {
@@ -292,7 +367,7 @@ export default function DiagnosticoPage() {
       {stage === 'email' && <EmailGate onContinue={onEmail} prefill={email} />}
       {stage === 'intro' && <Intro onStart={startQs} />}
       {stage === 'q' && <QuestionSection b={BOTTLENECKS[idx]} idx={idx} total={BOTTLENECKS.length} answers={answers[idx]} toggle={toggle} onNext={next} onPrev={prev} />}
-      {stage === 'result' && <Result scores={answers.map(r => r.filter(Boolean).length)} email={email} onRestart={restart} />}
+      {stage === 'result' && <Result scores={answers.map(r => r.filter(Boolean).length)} answers={answers} email={email} onRestart={restart} />}
     </>
   );
 }

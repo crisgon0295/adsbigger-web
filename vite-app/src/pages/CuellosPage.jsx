@@ -102,7 +102,23 @@ function EmailModal({ open, onClose }) {
             <div className="mono" style={{ fontSize: 11, color: 'var(--red)', letterSpacing: '.25em', textTransform: 'uppercase' }}>descarga gratuita</div>
             <div className="sg" style={{ fontSize: 34, lineHeight: 1.05, marginTop: 10 }}>¿A qué correo te lo enviamos?</div>
             <p className="sub" style={{ fontSize: 17, color: '#b8b8b8', marginTop: 12, fontStyle: 'italic' }}>Llega en 2 minutos. Sin spam.</p>
-            <form onSubmit={async e => { e.preventDefault(); if(valid) { setSent(true); if(window.fbq) window.fbq('track','Lead'); try { await fetch('https://devn8n.adsbigger.cloud/webhook/adsbigger-lead-magnet', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(form), mode:'no-cors' }); } catch(err) { console.error(err); } }}} style={{marginTop:28,display:'flex',flexDirection:'column',gap:16}}>
+            <form onSubmit={async e => {
+              e.preventDefault();
+              if (valid) {
+                setSent(true);
+                if (window.fbq) window.fbq('track', 'Lead');
+                try {
+                  console.log('Sending lead magnet webhook...', form);
+                  await fetch('https://devn8n.adsbigger.cloud/webhook/adsbigger-lead-magnet', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(form)
+                  });
+                } catch(err) {
+                  console.error('Lead magnet webhook error:', err);
+                }
+              }
+            }} style={{marginTop:28,display:'flex',flexDirection:'column',gap:16}}>
               <div><div className="input-label">Tu nombre</div><input value={form.nombre} onChange={e => setForm({...form,nombre:e.target.value})} autoFocus className="input" /></div>
               <div><div className="input-label">Email de trabajo</div><input value={form.email} onChange={e => setForm({...form,email:e.target.value})} type="email" className="input" /></div>
               <button type="submit" disabled={!valid} className={`btn ${valid ? 'btn-red' : ''}`} style={{ marginTop: 12, justifyContent: 'center', background: valid ? 'var(--red)' : '#222' }}>Enviar PDF →</button>
@@ -128,8 +144,13 @@ export default function CuellosPage() {
 
   useEffect(() => {
     window.scrollTo(0, 0);
-    if (searchParams.get('email') !== null) setModal(true);
   }, []);
+
+  useEffect(() => {
+    if (searchParams.get('email') === 'true' || searchParams.has('email')) {
+      setModal(true);
+    }
+  }, [searchParams]);
 
   return (
     <>

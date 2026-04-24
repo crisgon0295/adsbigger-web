@@ -1000,3 +1000,27 @@ input, textarea { font-family: inherit; }
     top: 120px;
   }
 }
+
+@media (max-width: 900px) {
+  .hide-on-mobile {
+    display: none !important;
+  }
+}
+/* -- 20. KIT SPECIFIC CSS ------------------------ */
+:root {
+  --line: rgba(255, 255, 255, 0.08);
+}
+.glass {
+  background: linear-gradient(180deg, rgba(30,30,30,0.55), rgba(15,15,15,0.35));
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1px solid var(--line);
+}
+@keyframes shine {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+}
+@keyframes pulseDot {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: .5; transform: scale(1.3); }
+}
