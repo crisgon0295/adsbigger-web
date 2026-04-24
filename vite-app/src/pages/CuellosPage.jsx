@@ -144,8 +144,13 @@ export default function CuellosPage() {
 
   useEffect(() => {
     window.scrollTo(0, 0);
-    if (searchParams.get('email') !== null) setModal(true);
   }, []);
+
+  useEffect(() => {
+    if (searchParams.get('email') === 'true' || searchParams.has('email')) {
+      setModal(true);
+    }
+  }, [searchParams]);
 
   return (
     <>

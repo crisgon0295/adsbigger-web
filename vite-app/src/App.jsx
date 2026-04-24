@@ -6,6 +6,8 @@ import WhatsAppFab from './components/WhatsAppFab';
 import HomePage from './pages/HomePage';
 import DiagnosticoPage from './pages/DiagnosticoPage';
 import CuellosPage from './pages/CuellosPage';
+import KitPage from './pages/KitPage';
+import SprintPage from './pages/SprintPage';
 
 /* Track page views in Meta Pixel on route change */
 function PageViewTracker() {
@@ -41,6 +43,8 @@ function App() {
         <Route path="/" element={<HomePage />} />
         <Route path="/diagnostico" element={<DiagnosticoPage />} />
         <Route path="/cuellos-de-botella" element={<CuellosPage />} />
+        <Route path="/kit" element={<KitPage />} />
+        <Route path="/sprint" element={<SprintPage />} />
       </Routes>
       <Footer />
       <WhatsAppFab />

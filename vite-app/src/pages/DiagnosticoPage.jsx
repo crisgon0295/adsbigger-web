@@ -331,6 +331,15 @@ export default function DiagnosticoPage() {
   useEffect(() => { window.scrollTo(0, 0); }, []);
 
   useEffect(() => {
+    let step = 0;
+    if (stage === 'intro') step = 1;
+    if (stage === 'q') step = 2 + idx;
+    if (stage === 'result') step = 7;
+    const progress = Math.min(100, Math.round((step / 7) * 100));
+    window.dispatchEvent(new CustomEvent('bant_progress', { detail: progress }));
+  }, [stage, idx]);
+
+  useEffect(() => {
     try {
       const saved = JSON.parse(localStorage.getItem('adsb_bant') || 'null');
       if (saved) {
