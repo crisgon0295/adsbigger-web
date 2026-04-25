@@ -50,8 +50,9 @@ export default function Navbar() {
         alt="adsBigger Logo" 
         style={{ 
           height: 'clamp(32px, 5vw, 42px)', 
-          width: 'auto', 
-          objectFit: 'contain' 
+          width: 'clamp(32px, 5vw, 42px)', 
+          objectFit: 'cover',
+          objectPosition: 'left'
         }} 
       />
     </Link>
@@ -186,8 +187,9 @@ export default function Navbar() {
               alt="adsBigger Logo" 
               style={{ 
                 height: 'clamp(30px, 4.5vw, 40px)', 
-                width: 'auto', 
-                objectFit: 'contain' 
+                width: 'clamp(30px, 4.5vw, 40px)', 
+                objectFit: 'cover',
+                objectPosition: 'left'
               }} 
             />
           </Link>
