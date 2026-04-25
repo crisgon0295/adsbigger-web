@@ -45,15 +45,14 @@ export default function Navbar() {
 
   const Logo = () => (
     <Link to="/" style={{ display: 'flex', alignItems: 'center', textDecoration: 'none' }}>
-      <img 
-        src="/logo-icon-white.webp" 
-        alt="adsBigger Logo" 
-        style={{ 
-          height: 'clamp(32px, 5vw, 42px)', 
-          width: 'clamp(32px, 5vw, 42px)', 
-          objectFit: 'cover',
-          objectPosition: 'left'
-        }} 
+      <img
+        src="/logo-icon-white.webp"
+        alt="adsBigger Logo"
+        style={{
+          height: 'clamp(28px, 3.5vw, 38px)',
+          width: 'auto',
+          objectFit: 'contain'
+        }}
       />
     </Link>
   );
@@ -182,15 +181,14 @@ export default function Navbar() {
       <nav style={{ position: 'sticky', top: 0, zIndex: 60, background: scrolled ? 'rgba(245,242,236,0.92)' : 'rgba(245,242,236,0.7)', backdropFilter: 'blur(14px)', borderBottom: `1px solid ${scrolled ? 'rgba(0,0,0,0.08)' : 'transparent'}`, transition: 'all 250ms' }}>
         <div style={{ maxWidth: 1280, margin: '0 auto', padding: '18px 40px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 18 }}>
           <Link to="/" style={{ display: 'flex', alignItems: 'center', textDecoration: 'none' }}>
-            <img 
-              src="/logo-icon-black.webp" 
-              alt="adsBigger Logo" 
-              style={{ 
-                height: 'clamp(30px, 4.5vw, 40px)', 
-                width: 'clamp(30px, 4.5vw, 40px)', 
-                objectFit: 'cover',
-                objectPosition: 'left'
-              }} 
+            <img
+              src="/logo-icon-black.webp"
+              alt="adsBigger Logo"
+              style={{
+                height: 'clamp(28px, 3.5vw, 38px)',
+                width: 'auto',
+                objectFit: 'contain'
+              }}
             />
           </Link>
           <div style={{ display: 'flex', gap: 28, alignItems: 'center' }} className="hide-on-mobile">
