@@ -5,8 +5,19 @@ export default function Footer() {
     <footer className="footer">
       <div className="footer-grid">
         <div>
-          <div className="navbar-logo">
-            <img src="/logo-adsbigger-white.webp" alt="adsBigger" width="160" height="32" loading="lazy" style={{ height: 32, objectFit: 'contain', opacity: 0.8 }} />
+          <div className="footer-logo-container" style={{ marginBottom: 24 }}>
+            <img 
+              src="/logo-adsbigger-white.webp" 
+              alt="adsBigger" 
+              loading="lazy" 
+              style={{ 
+                width: 'clamp(200px, 45vw, 480px)', 
+                height: 'auto', 
+                objectFit: 'contain', 
+                opacity: 0.9,
+                display: 'block'
+              }} 
+            />
           </div>
           <div style={{ fontSize: 14, color: '#888', marginTop: 14, lineHeight: 1.55, maxWidth: 320 }}>
             Instalamos sistemas, no vendemos anuncios. Bogotá, Colombia · Latam.

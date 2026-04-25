@@ -44,9 +44,9 @@ export default function Navbar() {
   };
 
   const Logo = () => (
-    <Link to="/" style={{ display: 'flex', alignItems: 'center', gap: 10, textDecoration: 'none', color: '#fff' }}>
-      <span style={{ width: 28, height: 28, display: 'grid', placeItems: 'center', background: '#D51A05', borderRadius: 6, fontFamily: 'Space Grotesk', fontWeight: 700, fontSize: 15 }}>A</span>
-      <span className="sg" style={{ fontSize: 17 }}>adsBigger<sup style={{ fontSize: 9, color: '#888', marginLeft: 2 }}>™</sup></span>
+    <Link to="/" style={{ display: 'flex', alignItems: 'center', gap: 12, textDecoration: 'none', color: '#fff' }}>
+      <img src="/logo-icon-white.webp" alt="adsBigger Icon" style={{ width: 32, height: 32, objectFit: 'contain' }} />
+      <span className="sg" style={{ fontSize: 19, letterSpacing: '-0.01em', fontWeight: 600 }}>adsBigger<sup style={{ fontSize: 10, color: '#888', marginLeft: 2, fontWeight: 400 }}>™</sup></span>
     </Link>
   );
 
@@ -173,9 +173,9 @@ export default function Navbar() {
     return (
       <nav style={{ position: 'sticky', top: 0, zIndex: 60, background: scrolled ? 'rgba(245,242,236,0.92)' : 'rgba(245,242,236,0.7)', backdropFilter: 'blur(14px)', borderBottom: `1px solid ${scrolled ? 'rgba(0,0,0,0.08)' : 'transparent'}`, transition: 'all 250ms' }}>
         <div style={{ maxWidth: 1280, margin: '0 auto', padding: '18px 40px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 18 }}>
-          <Link to="/" style={{ display: 'flex', alignItems: 'center', gap: 10, textDecoration: 'none', color: '#0A0A0A' }}>
-            <span className="serif" style={{ fontSize: 22, letterSpacing: '-0.02em' }}>adsBigger</span>
-            <sup style={{ fontSize: 10, color: '#888' }}>™</sup>
+          <Link to="/" style={{ display: 'flex', alignItems: 'center', gap: 12, textDecoration: 'none', color: '#0A0A0A' }}>
+            <img src="/logo-icon-black.webp" alt="adsBigger Icon" style={{ width: 30, height: 30, objectFit: 'contain' }} />
+            <span className="sg" style={{ fontSize: 19, letterSpacing: '-0.01em', fontWeight: 600 }}>adsBigger<sup style={{ fontSize: 10, color: '#888', marginLeft: 2, fontWeight: 400 }}>™</sup></span>
           </Link>
           <div style={{ display: 'flex', gap: 28, alignItems: 'center' }} className="hide-on-mobile">
             <Link to="/#sistema" style={{ color: '#444', textDecoration: 'none', fontSize: 14 }}>Sistema</Link>
