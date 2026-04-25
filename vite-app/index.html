@@ -6,9 +6,69 @@
   <title>adsBigger — Instalamos sistemas, no vendemos anuncios</title>
   <meta name="description" content="No somos agencia de marketing. Instalamos sistemas de adquisición, calificación y cierre predecibles en empresas que ya venden pero no escalan.">
   <link rel="icon" href="/logo-icon-white.png" />
+
+  <!-- Preconnect para recursos críticos -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=DM+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="preconnect" href="https://www.googletagmanager.com">
+  <link rel="preconnect" href="https://connect.facebook.net">
+
+  <!-- Fuentes optimizadas con font-display:swap para evitar bloqueo de renderizado -->
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=DM+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
+  <noscript><link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=DM+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap&display=swap" rel="stylesheet"></noscript>
+
+  <!-- CSS Crítico Inline para Above-the-Fold -->
+  <style>
+    /* Variables críticas */
+    :root {
+      --obsidian: #111111;
+      --pure-black: #0A0A0A;
+      --red: #D51A05;
+      --blue: #179DFF;
+      --white: #FFFFFF;
+      --font-headline: 'DM Serif Display', 'Georgia', serif;
+      --font-body: 'DM Sans', system-ui, -apple-system, sans-serif;
+      --padding-x: 32px;
+      --z-nav: 60;
+    }
+
+    /* Reset crítico */
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      -webkit-text-size-adjust: 100%;
+    }
+
+    body {
+      background: var(--obsidian);
+      color: var(--white);
+      font-family: var(--font-body);
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      overflow-x: hidden;
+      line-height: 1.5;
+    }
+
+    /* Navbar crítico */
+    .navbar {
+      position: sticky;
+      top: 0;
+      z-index: var(--z-nav);
+      background: rgba(16, 16, 16, 0.55);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    }
+
+    /* Root container */
+    #root {
+      min-height: 100vh;
+    }
+  </style>
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
@@ -23,39 +83,50 @@
   }
   </script>
 
-  <!-- Google Tag Manager -->
-  <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
-  new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
-  j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
-  'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-  })(window,document,'script','dataLayer','GTM-5WWJTXSJ');</script>
-  <!-- End Google Tag Manager -->
-
-  <!-- Meta Pixel Code -->
+  <!-- Scripts de analytics diferidos para no bloquear renderizado -->
   <script>
-  !function(f,b,e,v,n,t,s)
-  {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
-  n.callMethod.apply(n,arguments):n.queue.push(arguments)};
-  if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
-  n.queue=[];t=b.createElement(e);t.async=!0;
-  t.src=v;s=b.getElementsByTagName(e)[0];
-  s.parentNode.insertBefore(t,s)}(window, document,'script',
-  'https://connect.facebook.net/en_US/fbevents.js');
-  fbq('init', '831795259401999');
-  fbq('track', 'PageView');
-  </script>
-  <!-- End Meta Pixel Code -->
-  
-  <!-- Google tag (gtag.js) GA4 -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-T0ES655EJK"></script>
-  <script>
+    // Google Tag Manager - Inicialización diferida
     window.dataLayer = window.dataLayer || [];
+    (function(w,d,s,l,i){
+      w[l]=w[l]||[];
+      w[l].push({'gtm.start': new Date().getTime(),event:'gtm.js'});
+      var f=d.getElementsByTagName(s)[0],j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';
+      j.async=true;
+      j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;
+      // Defer GTM load to after page load
+      if (document.readyState === 'complete') {
+        f.parentNode.insertBefore(j,f);
+      } else {
+        window.addEventListener('load', function() {
+          f.parentNode.insertBefore(j,f);
+        });
+      }
+    })(window,document,'script','dataLayer','GTM-5WWJTXSJ');
+
+    // Meta Pixel - Inicialización diferida
+    !function(f,b,e,v,n,t,s){
+      if(f.fbq)return;
+      n=f.fbq=function(){n.callMethod?n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+      if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];
+      t=b.createElement(e);t.async=!0;t.src=v;s=b.getElementsByTagName(e)[0];
+      if (document.readyState === 'complete') {
+        s.parentNode.insertBefore(t,s);
+      } else {
+        window.addEventListener('load', function() {
+          s.parentNode.insertBefore(t,s);
+        });
+      }
+    }(window,document,'script','https://connect.facebook.net/en_US/fbevents.js');
+    fbq('init','831795259401999');
+    fbq('track','PageView');
+
+    // Google Analytics 4 - Configuración
     function gtag(){dataLayer.push(arguments);}
     gtag('js', new Date());
-
-    // Se deshabilita el page_view automático inicial porque React (Vite) se encarga de enviarlo dinámicamente en App.jsx
     gtag('config', 'G-T0ES655EJK', { send_page_view: false });
   </script>
+  <!-- GA4 script cargado de forma asíncrona y diferida -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-T0ES655EJK"></script>
 </head>
 <body>
   <!-- Google Tag Manager (noscript) -->
