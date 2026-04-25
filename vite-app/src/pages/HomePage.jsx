@@ -19,8 +19,20 @@ function HeroPanel() {
   ];
 
   useEffect(() => {
-    const id = setInterval(() => setLineIdx((i) => (i + 1) % lines.length), 900);
-    return () => clearInterval(id);
+    // Retrasar el inicio de la animación del panel para no competir con el renderizado inicial
+    const startAnimation = () => {
+      const id = setInterval(() => setLineIdx((i) => (i + 1) % lines.length), 1100);
+      return id;
+    };
+
+    let timerId;
+    if ('requestIdleCallback' in window) {
+      requestIdleCallback(() => { timerId = startAnimation(); });
+    } else {
+      setTimeout(() => { timerId = startAnimation(); }, 1000);
+    }
+    
+    return () => timerId && clearInterval(timerId);
   }, []);
 
   return (
