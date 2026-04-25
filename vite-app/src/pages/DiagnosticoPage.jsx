@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import Reveal from '../components/Reveal';
+import { validateEmail, checkRateLimit, secureFetch, sanitizeInput, detectSuspiciousBehavior } from '../utils/security';
 
 /* ── BANT Data ── */
 const BOTTLENECKS = [
@@ -35,7 +36,37 @@ const TIERS = [
 /* ── Sub-components ── */
 function EmailGate({ onContinue, prefill='' }) {
   const [email, setEmail] = useState(prefill);
-  const valid = /.+@.+\..+/.test(email);
+  const [error, setError] = useState('');
+  const [formStartTime] = useState(Date.now());
+
+  // Validación mejorada con función de seguridad
+  const valid = validateEmail(email);
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    setError('');
+
+    // Validar email
+    if (!validateEmail(email)) {
+      setError('Por favor ingresa un email válido de trabajo');
+      return;
+    }
+
+    // Rate limiting: máximo 3 intentos por minuto
+    if (!checkRateLimit('email-submit', 60000, 3)) {
+      setError('Demasiados intentos. Por favor espera un momento.');
+      return;
+    }
+
+    // Detectar comportamiento sospechoso (bots)
+    const fillTime = Date.now() - formStartTime;
+    if (detectSuspiciousBehavior(fillTime)) {
+      console.warn('Comportamiento sospechoso detectado');
+      // No mostrar error al usuario para no alertar a bots
+    }
+
+    onContinue(email);
+  };
   return (
     <section className="section-dark" style={{ minHeight: '80vh', display: 'flex', alignItems: 'center', position: 'relative', overflow: 'hidden' }}>
       <div className="glow-red" style={{ top: -100, right: -100, width: 600, height: 600 }} />
@@ -47,12 +78,22 @@ function EmailGate({ onContinue, prefill='' }) {
             Al terminar las 25 preguntas, recibes tu resultado exacto y el cuello de botella que debes romper primero.
           </p>
         </div>
-        <form onSubmit={e => { e.preventDefault(); if (valid) onContinue(email); }} className="card-dark" style={{ padding: '36px 32px' }}>
+        <form onSubmit={handleSubmit} className="card-dark" style={{ padding: '36px 32px' }}>
           <div className="mono" style={{ fontSize: 11, color: 'var(--blue)', letterSpacing: '.25em', textTransform: 'uppercase' }}>Ingresa tu email</div>
           <div className="sg" style={{ fontSize: 24, marginTop: 8, lineHeight: 1.2 }}>Para empezar el cuestionario.</div>
           <div style={{ marginTop: 32 }}>
             <div className="input-label">Email de trabajo</div>
-            <input value={email} onChange={e => setEmail(e.target.value)} type="email" autoFocus className="input" placeholder="tu@empresa.com" />
+            <input
+              value={email}
+              onChange={e => { setEmail(e.target.value); setError(''); }}
+              type="email"
+              autoFocus
+              autoComplete="email"
+              className="input"
+              placeholder="tu@empresa.com"
+              required
+            />
+            {error && <div style={{ color: 'var(--red)', fontSize: 13, marginTop: 8 }}>{error}</div>}
           </div>
           <button type="submit" disabled={!valid} className={`btn ${valid ? 'btn-red' : 'btn-ghost'}`} style={{ width: '100%', marginTop: 24, justifyContent: 'center' }}>Continuar al diagnóstico →</button>
           <div className="sub" style={{ fontSize: 13, color: '#666', marginTop: 16, textAlign: 'center', fontStyle: 'italic' }}>Sin spam. Solo valor aplicable.</div>
