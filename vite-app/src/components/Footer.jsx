@@ -38,6 +38,7 @@ export default function Footer() {
         <div>
           <div className="footer-col-title">Recursos</div>
           <div className="footer-col-links">
+            <Link to="/blog">Blog técnico</Link>
             <Link to="/diagnostico">Diagnóstico BANT</Link>
             <Link to="/cuellos-de-botella">Lead Magnet PDF</Link>
           </div>

@@ -10,6 +10,8 @@ const DiagnosticoPage = lazy(() => import('./pages/DiagnosticoPage'));
 const CuellosPage = lazy(() => import('./pages/CuellosPage'));
 const KitPage = lazy(() => import('./pages/KitPage'));
 const SprintPage = lazy(() => import('./pages/SprintPage'));
+const BlogPage = lazy(() => import('./pages/BlogPage'));
+const SistemaDeAdquisicionPage = lazy(() => import('./pages/blog/SistemaDeAdquisicionPage'));
 
 /* Track page views in Meta Pixel on route change */
 function PageViewTracker() {
@@ -58,6 +60,8 @@ function App() {
           <Route path="/cuellos-de-botella" element={<CuellosPage />} />
           <Route path="/kit" element={<KitPage />} />
           <Route path="/sprint" element={<SprintPage />} />
+          <Route path="/blog" element={<BlogPage />} />
+          <Route path="/blog/sistema-de-adquisicion" element={<SistemaDeAdquisicionPage />} />
         </Routes>
       </Suspense>
       <Footer />

@@ -175,6 +175,50 @@ export default function Navbar() {
     );
   }
 
+  if (path === '/blog' || path.startsWith('/blog/')) {
+    // BLOG — cream/parchment theme, black logo
+    return (
+      <nav style={{
+        position: 'sticky', top: 0, zIndex: 60,
+        background: scrolled ? 'rgba(245,242,236,0.94)' : 'rgba(245,242,236,0.72)',
+        backdropFilter: 'blur(14px)', WebkitBackdropFilter: 'blur(14px)',
+        borderBottom: `1px solid ${scrolled ? 'rgba(26,22,18,0.14)' : 'transparent'}`,
+        transition: 'all 250ms',
+      }}>
+        <div style={{ maxWidth: 1280, margin: '0 auto', padding: '16px 32px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 18 }}>
+          <Link to="/" style={{ display: 'flex', alignItems: 'center', textDecoration: 'none' }}>
+            <img
+              src="/logo-icon-black.webp"
+              alt="adsBigger Logo"
+              style={{ height: 'clamp(28px, 3.5vw, 36px)', width: 'auto', objectFit: 'contain' }}
+            />
+          </Link>
+          <div style={{ display: 'flex', gap: 24, alignItems: 'center' }} className="hide-on-mobile">
+            <Link to="/#sistema" style={{ color: '#555', textDecoration: 'none', fontSize: 13, fontWeight: 500 }}>Sistema</Link>
+            <Link to="/blog" style={{ color: '#1a1612', textDecoration: 'none', fontSize: 13, fontWeight: 600, borderBottom: '1px solid #D51A05', paddingBottom: 2 }}>Blog</Link>
+            <Link to="/kit" style={{ color: '#555', textDecoration: 'none', fontSize: 13, fontWeight: 500 }}>Kit · $97</Link>
+            <Link to="/sprint" onClick={() => track('CTA_Click', { label: 'Blog_Nav_Sprint' })} style={{
+              color: '#D51A05', textDecoration: 'none', fontSize: 12, fontWeight: 600,
+              letterSpacing: '.1em', textTransform: 'uppercase',
+              padding: '6px 12px', border: '1px solid rgba(213,26,5,0.35)', borderRadius: 6,
+            }}>
+              Sprint · $5M
+            </Link>
+          </div>
+          <Link to="/diagnostico" onClick={() => track('CTA_Click', { label: 'Blog_Nav_Diagnostico' })} style={{
+            background: '#1a1612', color: '#F5F2EC',
+            padding: '11px 18px', borderRadius: 8,
+            textDecoration: 'none', fontSize: 12,
+            fontFamily: 'DM Sans, sans-serif', fontWeight: 700,
+            letterSpacing: '.06em', textTransform: 'uppercase',
+          }}>
+            Diagnóstico →
+          </Link>
+        </div>
+      </nav>
+    );
+  }
+
   if (path === '/sprint') {
     // SPRINT
     return (
