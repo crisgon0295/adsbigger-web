@@ -77,8 +77,9 @@ export default function Navbar() {
           <Logo />
           <div style={{ display: 'flex', gap: 24, alignItems: 'center' }} className="hide-on-mobile">
             <a href="#sistema" style={{ ...navL, color: '#fff', borderBottom: '1px solid #D51A05', paddingBottom: 2 }}>Sistema</a>
-            {['Casos', 'Proceso', 'Sobre', 'Blog'].map(l =>
+            {['Casos', 'Proceso', 'Sobre'].map(l =>
               <a key={l} href={`#${l.toLowerCase()}`} style={navL}>{l}</a>)}
+            <Link to="/blog" style={navL}>Blog</Link>
             <KitBadge />
           </div>
           <Link to="/diagnostico" className="sg" style={{
@@ -102,6 +103,7 @@ export default function Navbar() {
           <div style={{ display: 'flex', gap: 24, alignItems: 'center' }} className="hide-on-mobile">
             <Link to="/#sistema" style={navL}>Sistema</Link>
             <a href="#top" style={{ ...navL, color: '#fff', borderBottom: '1px solid #179DFF', paddingBottom: 2 }}>PDF gratis</a>
+            <Link to="/blog" style={navL}>Blog</Link>
             <Link to="/diagnostico" style={navL}>Diagnóstico</Link>
             <KitBadge />
           </div>
@@ -125,6 +127,7 @@ export default function Navbar() {
           <Logo />
           <div style={{ display: 'flex', gap: 24, alignItems: 'center' }} className="hide-on-mobile">
             <Link to="/#sistema" style={navL}>Sistema</Link>
+            <Link to="/blog" style={navL}>Blog</Link>
             <Link to="/cuellos-de-botella" style={navL}>PDF</Link>
             <Link to="/#casos" style={navL}>Casos</Link>
             <KitBadge />
@@ -148,6 +151,7 @@ export default function Navbar() {
           <Logo />
           <div style={{ display: 'flex', gap: 24, alignItems: 'center' }} className="hide-on-mobile">
             <Link to="/#sistema" style={navL}>Sistema</Link>
+            <Link to="/blog" style={navL}>Blog</Link>
             <Link to="/cuellos-de-botella" style={navL}>PDF gratis</Link>
             <Link to="/diagnostico" style={navL}>Diagnóstico</Link>
             <Link to="/sprint" onClick={() => track('CTA_Click', { label: 'Nav_Sprint' })} className="sg" style={{
@@ -237,6 +241,7 @@ export default function Navbar() {
           </Link>
           <div style={{ display: 'flex', gap: 28, alignItems: 'center' }} className="hide-on-mobile">
             <Link to="/#sistema" style={{ color: '#444', textDecoration: 'none', fontSize: 14 }}>Sistema</Link>
+            <Link to="/blog" style={{ color: '#444', textDecoration: 'none', fontSize: 14 }}>Blog</Link>
             <Link to="/kit" style={{ color: '#444', textDecoration: 'none', fontSize: 14 }}>Kit · $97</Link>
             <a href="#top" style={{ color: '#0A0A0A', textDecoration: 'none', fontSize: 14, fontWeight: 500 }}>Sprint</a>
           </div>

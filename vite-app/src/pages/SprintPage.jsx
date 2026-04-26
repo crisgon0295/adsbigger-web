@@ -414,6 +414,7 @@ function FooterB() {
         </div>
         <div style={{ display: 'flex', gap: 22, fontSize: 13 }}>
           <Link to="/" style={{ color: '#888', textDecoration: 'none' }}>Sistema</Link>
+          <Link to="/blog" style={{ color: '#888', textDecoration: 'none' }}>Blog</Link>
           <Link to="/kit" style={{ color: '#888', textDecoration: 'none' }}>Kit · $97</Link>
           <a href="#aplicar" style={{ color: '#888', textDecoration: 'none' }}>Sprint · $5M</a>
         </div>
