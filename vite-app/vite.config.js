@@ -6,6 +6,10 @@ export default defineConfig({
   plugins: [react()],
 
   build: {
+    // Build va directo al directorio raíz del servidor web
+    outDir: '../',
+    emptyOutDir: false,
+
     // Target para navegadores modernos (ES2020+) para bundles más pequeños
     target: 'es2020',
 

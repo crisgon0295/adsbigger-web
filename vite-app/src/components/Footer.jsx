@@ -41,14 +41,17 @@ export default function Footer() {
             <Link to="/blog">Blog técnico</Link>
             <Link to="/diagnostico">Diagnóstico BANT</Link>
             <Link to="/cuellos-de-botella">Lead Magnet PDF</Link>
+            <Link to="/kit">Kit · $97</Link>
+            <Link to="/sprint">Sprint · $5M</Link>
           </div>
         </div>
 
         <div>
           <div className="footer-col-title">Contacto</div>
           <div className="footer-col-links">
-            <a href="https://wa.me/573057670817?text=Hola,%20me%20gustar%C3%ADa%20hacer%20el%20diagn%C3%B3stico%20de%20sistemas" target="_blank" rel="noopener noreferrer">WhatsApp</a>
-            <a href="https://calendly.com/agency-adsbigger/reunion-kick-off" target="_blank" rel="noopener noreferrer">Calendly</a>
+            <a href="https://wa.me/573057670817?text=Hola,%20me%20gustar%C3%ADa%20hacer%20el%20diagn%C3%B3stico%20de%20sistemas" target="_blank" rel="noopener noreferrer">WhatsApp directo</a>
+            <a href="https://calendly.com/agency-adsbigger/reunion-kick-off" target="_blank" rel="noopener noreferrer">Agendar llamada</a>
+            <Link to="/diagnostico">Diagnóstico gratuito →</Link>
           </div>
         </div>
       </div>

@@ -77,8 +77,9 @@ export default function Navbar() {
           <Logo />
           <div style={{ display: 'flex', gap: 24, alignItems: 'center' }} className="hide-on-mobile">
             <a href="#sistema" style={{ ...navL, color: '#fff', borderBottom: '1px solid #D51A05', paddingBottom: 2 }}>Sistema</a>
-            {['Casos', 'Proceso', 'Sobre'].map(l =>
-              <a key={l} href={`#${l.toLowerCase()}`} style={navL}>{l}</a>)}
+            <a href="#casos" style={navL}>Casos</a>
+            <a href="#proceso" style={navL}>Proceso</a>
+            <a href="#garantia" style={navL}>Garantía</a>
             <Link to="/blog" style={navL}>Blog</Link>
             <KitBadge />
           </div>
